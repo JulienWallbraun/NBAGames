@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getGamesByDate } from "../API/FreeNBAAPI";
+import Game from "./Game";
 
 class Search extends React.Component {
   constructor(props) {
@@ -21,12 +22,10 @@ class Search extends React.Component {
 
   _loadGames(date) {
     getGamesByDate(date).then((response) => {
-      console.log("j'ai une réponse");
-      console.log(response.data.length);
       let newGames = [];
       response.data.forEach((element) => {
         newGames.push(element);
-        console.log(
+       /* console.log(
           element.date +
             " : " +
             element.home_team.full_name +
@@ -36,10 +35,9 @@ class Search extends React.Component {
             element.visitor_team_score +
             " " +
             element.visitor_team.full_name
-        );
+        );*/
       });
       this.setState({ games: newGames });
-      console.log("games : " + this.state.games);
     });
     /*
     getGamesByDate(date).then(data =>{
@@ -53,8 +51,8 @@ class Search extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.searchContainer}>
-          <TextInput
-            placeholder="Titre du film"
+          <TextInput style={styles.date}
+            placeholder="Date"
             onChangeText={(value) => {
               this.setState({ date: value });
             }}
@@ -72,28 +70,17 @@ class Search extends React.Component {
           />
         </View>
         <View style={styles.gamesContainer}>
-        <Text>
-          Nombre de matchs le {this.state.date} : {this.state.games.length}
-        </Text>
-        <FlatList
-          data={this.state.games}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={(item) => (
-            <Fragment>
-              <Text>
-                {item.item.id} : {item.item.home_team.full_name}{" "}
-                {item.item.home_team_score}-{item.item.visitor_team_score}{" "}
-                {item.item.visitor_team.full_name}
-              </Text>
-              <Text>TOTO</Text>
-            </Fragment>
-          )}
-        ></FlatList>
-        {/*
-        <FlatList data={this.state.games} keyExtractor={item => item.id.toString()} renderItem={item => <Text>{item.home_team.full_name}</Text>}>
-
-        </FlatList>
-        */}
+          <Text>
+            Nombre de matchs le {this.state.date} : {this.state.games.length}
+          </Text>
+          <FlatList
+            style={styles.gamesList}
+            data={this.state.games}
+            keyExtractor={(value) => value.id.toString()}
+            renderItem={(value) => (
+              <Game game={value.item} />
+            )}
+          ></FlatList>
         </View>
       </View>
     );
@@ -102,20 +89,32 @@ class Search extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 40,
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
+    //alignItems: "center",
     justifyContent: "center",
   },
   searchContainer: {
-    marginTop : 20,
-    flex: 1,
+    //height: 40,
+    //flex: 1,
+    alignContent: "center",
     backgroundColor: "#EEEFFF",
+    flexDirection: "row",
+  },
+  date:{
+    width: 100,
+    textAlign: "center",
   },
   gamesContainer: {
-    flex: 4,
-    backgroundColor: "#FFFDDD",
+    flex: 1,
+    backgroundColor: "purple",
   },
+  gamesList: {
+    flex:1,
+    backgroundColor: 'blue',
+    //width:300,
+  }
 });
 
 export default Search;
