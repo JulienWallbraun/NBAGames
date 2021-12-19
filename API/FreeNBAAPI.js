@@ -13,10 +13,8 @@ export function getGamesByDate(date) {
     }
   )
     .then((response) => {
-     console.log("OK response")
-     //console.log(response.json())
-        //response.json();
-    return response.json();
+      console.log("OK response");
+      return response.json();
     })
     .catch((err) => {
       console.error(err);

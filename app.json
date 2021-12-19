@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/nba-logo-transparent.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/nba-logo-transparent.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
