@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, Button, Image } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Moment from "moment-timezone";
 import Hawks from "../assets/NBA_logos/Hawks.png";
 import Celtics from "../assets/NBA_logos/Celtics.png";
 import Nets from "../assets/NBA_logos/Nets.png";
@@ -30,43 +32,9 @@ import Spurs from "../assets/NBA_logos/Spurs.png";
 import Raptors from "../assets/NBA_logos/Raptors.png";
 import Jazz from "../assets/NBA_logos/Jazz.png";
 import Wizards from "../assets/NBA_logos/Wizards.png";
-/*
-const MAP_ID_TO_LOGO = {
-  1: Hawks,
-  2: Celtics,
-  3: Nets,
-  4: Hornets,
-  5: Bulls,
-  6: Cavaliers,
-  7: Mavericks,
-  8: Nuggets,
-  9: Pistons,
-  10: Warriors,
-  11: Rockets,
-  12: Pacers,
-  13: Clippers,
-  14: Lakers,
-  15: Grizzlies,
-  16: Heat,
-  17: Bucks,
-  18: Timberwolves,
-  19: Pelicans,
-  20: Knicks,
-  21: Thunder,
-  22: Magic,
-  23: Sixers,
-  24: Suns,
-  25: TrailBlazers,
-  26: Kings,
-  27: Spurs,
-  28: Raptors,
-  29: Jazz,
-  30: Wizards,
-};
-*/
+
 class Game extends React.Component {
   _getTeamLogoFromId(id) {
-    const game = this.props.game;
     switch (id) {
       case 1:
         return Hawks;
@@ -179,56 +147,113 @@ class Game extends React.Component {
     return result;
   }
 
+  _isGameNotStarted() {
+    const game = this.props.game;
+    return game.period == 0;
+  }
+
+  _isGameInProgress() {
+    const game = this.props.game;
+    return game.period != 0 && game.status != "Final";
+  }
+
+  _isGameFinal() {
+    const game = this.props.game;
+    return game.status == "Final";
+  }
+
+  _getFranceLocalTimeFromEasternTime() {
+    const game = this.props.game;
+    //convert "2022-04-01T00:00:00.000Z" to "2022-04-01"
+    let localDateEastern = game.date.substring(0, 10);
+    //convert "10:30 PM ET" to "22:30" and "8:30 AM" to "08:30"
+    let localTimeEastern = Moment(game.status.slice(0, -2), "HH:mm A").format(
+      "HH:mm"
+    );
+    //localTimeEastern = game.status.includes("PM") ? localTimeEastern : localTimeEastern;
+    let localDateTimeEastern = localDateEastern + " " + localTimeEastern;
+    let momentEastern = Moment.tz(localDateTimeEastern, "America/New_York");
+    let momentFrance = momentEastern.clone().tz("Europe/Paris").format("HH:mm");
+    return momentFrance;
+  }
+
   render() {
     const game = this.props.game;
     return (
       <View style={styles.gameContainer}>
-        {/*<Text>{game.id}</Text>*/}
         <Text
           style={[
             styles.team,
             styles.homeTeam,
-            this._isHomeTeamWinnner() ? styles.winningTeam : null,
+            this._isHomeTeamWinnner() && (styles.winningTeam),
           ]}
         >
           {game.home_team.full_name}
         </Text>
-        <Image style={styles.logo} source={this._getTeamLogoFromId(game.home_team.id)} />
-        <View
-          style={[
-            styles.scoreContainer,
-            game.status == "Final"
-              ? styles.gameStatusFinal
-              : game.time == ""
-              ? styles.gameStatusNotStarted
-              : styles.gameStatusInProgress,
-          ]}
-        >
-          <Text
-            style={[
-              styles.score,
-              this._isHomeTeamWinnner() ? styles.winningTeam : null,
-            ]}
-          >
-            {game.home_team_score}
-          </Text>
-          <Text style={styles.score}>-</Text>
-          <Text
-            style={[
-              styles.score,
-              this._isVisitorTeamWinnner() ? styles.winningTeam : null,
-            ]}
-          >
-            {game.visitor_team_score}
-          </Text>
+        <Image
+          style={styles.logo}
+          source={this._getTeamLogoFromId(game.home_team.id)}
+        />
+        <View style={styles.superScoreContainer}>
+          {
+            //Display when the game will start if not started or finished yet, else display score
+            this._isGameNotStarted() ? (
+              //case game not started nor finished
+              <Text
+                style={[
+                  styles.scoreContainer,
+                  styles.gameStatusNotStarted,
+                ]}
+              >
+                {this._getFranceLocalTimeFromEasternTime()}
+              </Text>
+            ) : (
+              //case game started or finished
+              <View
+                style={[
+                  styles.scoreContainer,
+                  this._isGameFinal()
+                    ? styles.gameStatusFinal
+                    : styles.gameStatusInProgress,
+                ]}
+              >
+                <Text
+                  style={[
+                    styles.scoreContainer,
+                    this._isHomeTeamWinnner() && (styles.winningTeam),
+                  ]}
+                >
+                  {game.home_team_score}
+                </Text>
+                <Text style={styles.scoreContainer}>-</Text>
+                <Text
+                  style={[
+                    styles.scoreContainer,
+                    this._isVisitorTeamWinnner() && (styles.winningTeam),
+                  ]}
+                >
+                  {game.visitor_team_score}
+                </Text>
+              </View>
+            )
+          }
+          {//display remaining time if the game is in progress
+          this._isGameInProgress() && (
+            <Text style={styles.gameInProgressTime}>
+              {game.status + (game.time == "" ? "" : " " + game.time)}
+            </Text>
+          ) }
         </View>
 
-        <Image style={styles.logo} source={this._getTeamLogoFromId(game.visitor_team.id)} />
+        <Image
+          style={styles.logo}
+          source={this._getTeamLogoFromId(game.visitor_team.id)}
+        />
         <Text
           style={[
             styles.team,
             styles.visitorTeam,
-            this._isVisitorTeamWinnner() ? styles.winningTeam : null,
+            this._isVisitorTeamWinnner() && (styles.winningTeam),
           ]}
         >
           {game.visitor_team.full_name}
@@ -243,7 +268,9 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     backgroundColor: "#EEEEEE",
-    height: 40,
+    borderColor: "#FFFFFF",
+    borderWidth: 2,
+    //height: 50,
     alignItems: "center",
   },
   team: {
@@ -260,30 +287,37 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   logo: {
-    width: 35,
-    height: 35,
+    minHeight: 35,
+    minWidth: 35,
+    //height: 35,
+    maxHeight: 45,
+    maxWidth: 45,
+    //flex: 10,
     margin: 10,
     resizeMode: "contain",
   },
-  scoreContainer: {
+  superScoreContainer: {
     flex: 4,
+  },
+  scoreContainer: {
     flexDirection: "row",
-    backgroundColor: "#000000",
     textAlign: "center",
     justifyContent: "center",
-  },
-  score: {
-    color: "#FFFFFF",
     fontSize: 16,
+    color: "#FFFFFF",
   },
   gameStatusFinal: {
-    color: "#FFFFFF",
+    backgroundColor: "#000000",
   },
   gameStatusInProgress: {
     backgroundColor: "#DF0000",
   },
   gameStatusNotStarted: {
     backgroundColor: "#88888888",
+  },
+  gameInProgressTime: {
+    fontSize: 10,
+    textAlign: "center",
   },
 });
 

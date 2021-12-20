@@ -2,84 +2,115 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   View,
-  TextInput,
   Button,
   FlatList,
   Text,
+  TouchableOpacity,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getGamesByDate } from "../API/FreeNBAAPI";
 import Game from "./Game";
+import MockResponse from "../API/mockResponseGetGamesOnSpecificDate.json";
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
+    this._date = new Date();
     this.state = {
-      date: new Date().toISOString().substring(0, 10),
       games: [],
+
+      //for date picker
+      show: false,
+      //end for date picker
     };
+    this._loadGames();
   }
 
-  _loadGames(date) {
-    getGamesByDate(date).then((response) => {
-      let newGames = [];
-      response.data.forEach((element) => {
-        newGames.push(element);
-       /* console.log(
-          element.date +
-            " : " +
-            element.home_team.full_name +
-            " " +
-            element.home_team_score +
-            "-" +
-            element.visitor_team_score +
-            " " +
-            element.visitor_team.full_name
-        );*/
-      });
-      this.setState({ games: newGames });
+  _loadGames() {
+    getGamesByDate(this._date.toISOString().substring(0, 10)).then(
+      (response) => {
+        let newGames = [];
+        response.data.forEach((element) => {
+          newGames.push(element);
+        });
+        this.setState({ games: newGames });
+      }
+    );
+  }
+
+  _loadMockGames() {
+    let newGames = [];
+    MockResponse.data.forEach((element) => {
+      newGames.push(element);
     });
-    /*
-    getGamesByDate(date).then(data =>{
-      console.log(data)
-    });
-    */
-    //console.log(games);
+    this.setState({ games: newGames });
+  }
+
+  _onChangeDatePicker(event, selectedDate) {
+    //change date from picker if not cancel and selected date is different from the current current date used
+    if (
+      selectedDate !== undefined &&
+      (selectedDate.getDate() != this._date.getDate() ||
+        selectedDate.getMonth() != this._date.getMonth() ||
+        selectedDate.getFullYear() != this._date.getFullYear())
+    ) {
+      this._date = selectedDate;
+      this._loadGames();
+      this.setState({ show: false });
+    }
   }
 
   render() {
     return (
       <View style={styles.container}>
+        {this.state.show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={this._date}
+            mode="date"
+            display="default"
+            onChange={(e, s) => this._onChangeDatePicker(e, s)}
+          />
+        )}
         <View style={styles.searchContainer}>
-          <TextInput style={styles.date}
-            placeholder="Date"
-            onChangeText={(value) => {
-              this.setState({ date: value });
+          <Button
+            color="#000000"
+            title="<"
+            onPress={() => {
+              this._date.setDate(this._date.getDate() - 1);
+              this._loadGames();
             }}
           />
-          <Button
-            title="Rechercher"
+
+          <TouchableOpacity style={styles.date}
             onPress={() => {
-              /*
-            console.log(
-              this.state.date + "      type : " + typeof this.state.date
-            );
-            */
-              this._loadGames(this.state.date);
+              this.setState({ show: true });
+            }}
+          >
+            <Text styles={styles.text}>{this._date.toLocaleDateString()}</Text>
+          </TouchableOpacity>
+
+          <Button
+            color="#000000"
+            title=">"
+            onPress={() => {
+              this._date.setDate(this._date.getDate() + 1);
+              this._loadGames();
             }}
           />
         </View>
         <View style={styles.gamesContainer}>
-          <Text>
-            Nombre de matchs le {this.state.date} : {this.state.games.length}
+          {
+            //trick to load mock response on click
+          }
+          <Text style={styles.gamesTitle} onPress={() => this._loadMockGames()}>
+            Matchs de la nuit
           </Text>
           <FlatList
             style={styles.gamesList}
             data={this.state.games}
             keyExtractor={(value) => value.id.toString()}
-            renderItem={(value) => (
-              <Game game={value.item} />
-            )}
+            renderItem={(value) => <Game game={value.item} />}
           ></FlatList>
         </View>
       </View>
@@ -96,24 +127,30 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   searchContainer: {
-    //height: 40,
-    //flex: 1,
     alignContent: "center",
-    backgroundColor: "#EEEFFF",
+    justifyContent: "center",
     flexDirection: "row",
   },
-  date:{
+  date: {
     width: 100,
-    textAlign: "center",
+    backgroundColor: "#EEEEEE",
+    justifyContent: "center",
+    alignItems: "center",
   },
   gamesContainer: {
     flex: 1,
-    backgroundColor: "purple",
+  },
+  gamesTitle: {
+    fontSize: 25,
+    fontWeight: "bold",
+    alignItems: "center",
+    textAlign: "center",
   },
   gamesList: {
-    flex:1,
-    backgroundColor: 'blue',
-    //width:300,
+    flex: 1,
+  },
+  text:{
+    fontSize: 24,
   }
 });
 
