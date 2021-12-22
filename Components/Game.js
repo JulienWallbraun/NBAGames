@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, View, Text, Button, Image } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import React from "react";
+import { StyleSheet, View, Text, Image } from "react-native";
 import Moment from "moment-timezone";
 import Hawks from "../assets/NBA_logos/Hawks.png";
 import Celtics from "../assets/NBA_logos/Celtics.png";
@@ -162,25 +161,21 @@ class Game extends React.Component {
     return game.status == "Final";
   }
 
-  _getFranceLocalTimeFromEasternTime() {
+  //display starting time in locale timezone from starting time in Eastern timezone (New york timezone)
+  _getLocalTimeFromEasternTime() {    
     const game = this.props.game;
-    //convert "2022-04-01T00:00:00.000Z" to "2022-04-01"
-    let localDateEastern = game.date.substring(0, 10);
-    //convert "10:30 PM ET" to "22:30" and "8:30 AM" to "08:30"
-    let localTimeEastern = Moment(game.status.slice(0, -2), "HH:mm A").format(
-      "HH:mm"
-    );
-    //localTimeEastern = game.status.includes("PM") ? localTimeEastern : localTimeEastern;
-    let localDateTimeEastern = localDateEastern + " " + localTimeEastern;
+    //concatenete game date  "2021-12-19T00:00:00.000Z" and game time "8:00 PM ET" to get single game date and time "2021-12-19 8:00 PM" and convert it to "2021-12-19 20:00"
+    let localDateTimeEastern = Moment(game.date.substring(0, 10)+" "+game.status.slice(0, -3), "YYYY-MM-DD HH:mm AA").format("YYYY-MM-DD HH:mm");
+    //declare the game starting date and time is the one in Eastern Timezone (New York timezone)
     let momentEastern = Moment.tz(localDateTimeEastern, "America/New_York");
-    let momentFrance = momentEastern.clone().tz("Europe/Paris").format("HH:mm");
-    return momentFrance;
+    let momentLocale = momentEastern.clone().tz(Moment.tz.guess()).format("HH:mm");
+    return momentLocale;
   }
 
   render() {
     const game = this.props.game;
     return (
-      <View style={styles.gameContainer}>
+      <View style={styles.gameContainer}>              
         <Text
           style={[
             styles.team,
@@ -205,7 +200,7 @@ class Game extends React.Component {
                   styles.gameStatusNotStarted,
                 ]}
               >
-                {this._getFranceLocalTimeFromEasternTime()}
+                {this._getLocalTimeFromEasternTime()}
               </Text>
             ) : (
               //case game started or finished

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   View,
@@ -6,11 +6,14 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getGamesByDate } from "../API/FreeNBAAPI";
 import Game from "./Game";
 import MockResponse from "../API/mockResponseGetGamesOnSpecificDate.json";
+import NoGamesImage from "../assets/NoGames.png";
+import Moment from "moment";
 
 class Search extends React.Component {
   constructor(props) {
@@ -27,23 +30,58 @@ class Search extends React.Component {
   }
 
   _loadGames() {
-    getGamesByDate(this._date.toISOString().substring(0, 10)).then(
+    //format date to "2021-12-20" to comply with API date expected format
+    getGamesByDate(Moment(this._date).format("YYYY-MM-DD")).then(
       (response) => {
-        let newGames = [];
-        response.data.forEach((element) => {
-          newGames.push(element);
+        let loadedGames = [];
+        response.data.forEach((game) => {
+          loadedGames.push(game);
         });
-        this.setState({ games: newGames });
+        let orderedGames = this._orderGames(loadedGames);
+        this.setState({ games: orderedGames });
       }
     );
   }
 
   _loadMockGames() {
-    let newGames = [];
-    MockResponse.data.forEach((element) => {
-      newGames.push(element);
-    });
-    this.setState({ games: newGames });
+    let orderedGames = this._orderGames(MockResponse.data);
+    this.setState({ games: orderedGames });
+  }
+
+  /* order games with the following sort :
+  - games finalized (same order as given by the API)
+  - games in progress (same order as given by the API)
+  - games not started (order by starting time, same order as given by the API if several games have the same starting time)
+  */
+  _orderGames(games) {
+    //no need to sort list of games if <= 1
+    if (games!== undefined && games.length > 1) {
+      let gamesFinalized = [];
+      let gamesInProgress = [];
+      let gamesNotStarted = [];
+
+      /*create 3 tab :
+      - 1 for games finalized
+      - 1 for games in progress
+      - 1 for games not started
+      */
+      games.forEach((game) => {
+        game.status == "Final"
+          ? gamesFinalized.push(game)
+          : game.period != 0
+          ? gamesInProgress.push(game)
+          : gamesNotStarted.push(game);
+      });
+      //no need to sort list of games not started if <= 1      
+      if (gamesNotStarted.length > 1){
+        gamesNotStarted.sort((a, b) => Moment(a.status,"HH:mm AA") - Moment(b.status,"HH:mm AA"));
+      }
+      
+     
+      
+      games = gamesFinalized.concat(gamesInProgress).concat(gamesNotStarted);
+    }
+    return games;
   }
 
   _onChangeDatePicker(event, selectedDate) {
@@ -56,8 +94,8 @@ class Search extends React.Component {
     ) {
       this._date = selectedDate;
       this._loadGames();
-      this.setState({ show: false });
     }
+    this.setState({ show: false });
   }
 
   render() {
@@ -82,12 +120,13 @@ class Search extends React.Component {
             }}
           />
 
-          <TouchableOpacity style={styles.date}
+          <TouchableOpacity
+            style={styles.date}
             onPress={() => {
               this.setState({ show: true });
             }}
           >
-            <Text styles={styles.text}>{this._date.toLocaleDateString()}</Text>
+            <Text>{this._date.toLocaleDateString()}</Text>
           </TouchableOpacity>
 
           <Button
@@ -100,18 +139,30 @@ class Search extends React.Component {
           />
         </View>
         <View style={styles.gamesContainer}>
-          {
-            //trick to load mock response on click
-          }
-          <Text style={styles.gamesTitle} onPress={() => this._loadMockGames()}>
-            Matchs de la nuit
-          </Text>
-          <FlatList
-            style={styles.gamesList}
-            data={this.state.games}
-            keyExtractor={(value) => value.id.toString()}
-            renderItem={(value) => <Game game={value.item} />}
-          ></FlatList>
+          {this.state.games.length > 0 ? (
+            //Display list of games found for the specified date
+            //trick to load mock response on press
+            <>
+              <Text
+                style={styles.gamesTitle}
+                onPress={() => this._loadMockGames()}
+              >
+                Matchs de la nuit
+              </Text>
+              <FlatList
+                style={styles.gamesList}
+                data={this.state.games}
+                keyExtractor={(value) => value.id.toString()}
+                renderItem={(value) => <Game game={value.item} />}
+              ></FlatList>
+            </>
+          ) : (
+            //Display image and text to indicate no games were found for the specified date
+            <View style={styles.noGames}>
+              <Image style={styles.noGamesImage} source={NoGamesImage} />
+              <Text style={styles.noGamesText}>Pas de matchs cette nuit!</Text>
+            </View>
+          )}
         </View>
       </View>
     );
@@ -145,13 +196,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignItems: "center",
     textAlign: "center",
+    margin: 10,
   },
   gamesList: {
     flex: 1,
   },
-  text:{
-    fontSize: 24,
-  }
+  noGames: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  noGamesImage: {
+    maxHeight: 250,
+    maxWidth: 250,
+    resizeMode: "contain",
+  },
+  noGamesText: {
+    fontSize: 25,
+    margin: 20,
+  },
 });
 
 export default Search;
