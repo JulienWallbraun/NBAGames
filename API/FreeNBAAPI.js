@@ -19,3 +19,22 @@ export function getGamesByDate(date) {
       console.error(err);
     });
 }
+
+export function getPlayersStatsByGame(gameId) {
+  return fetch(
+    "https://free-nba.p.rapidapi.com/stats?page=0&per_page=50&game_ids[]=" + gameId,
+    {
+      method: "GET",
+      headers: {
+        "x-rapidapi-host": API_HOST,
+        "x-rapidapi-key": API_KEY,
+      },
+    }
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+}

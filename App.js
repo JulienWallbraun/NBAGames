@@ -1,13 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import React, { useState } from 'react';
-import Search from './Components/Search';
-import DateTimePicker from "@react-native-community/datetimepicker";
+import React from 'react';
+import Navigation from './Components/Navigation';
 
 export default function App() {
 
   return (   
-   <Search/>
+    <Navigation/>
   );
 }
 

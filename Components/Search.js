@@ -11,7 +11,7 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { getGamesByDate } from "../API/FreeNBAAPI";
 import Game from "./Game";
-import MockResponse from "../API/mockResponseGetGamesOnSpecificDate.json";
+import MockResponseGetGamesOnSpecificDate from "../API/mockResponseGetGamesOnSpecificDate.json";
 import NoGamesImage from "../assets/NoGames.png";
 import Moment from "moment";
 
@@ -31,20 +31,16 @@ class Search extends React.Component {
 
   _loadGames() {
     //format date to "2021-12-20" to comply with API date expected format
-    getGamesByDate(Moment(this._date).format("YYYY-MM-DD")).then(
-      (response) => {
-        let loadedGames = [];
-        response.data.forEach((game) => {
-          loadedGames.push(game);
-        });
-        let orderedGames = this._orderGames(loadedGames);
-        this.setState({ games: orderedGames });
-      }
-    );
+    getGamesByDate(Moment(this._date).format("YYYY-MM-DD")).then((response) => {
+      let orderedGames = this._orderGames(response.data);
+      this.setState({ games: orderedGames });
+    });
   }
 
   _loadMockGames() {
-    let orderedGames = this._orderGames(MockResponse.data);
+    let orderedGames = this._orderGames(
+      MockResponseGetGamesOnSpecificDate.data
+    );
     this.setState({ games: orderedGames });
   }
 
@@ -55,7 +51,7 @@ class Search extends React.Component {
   */
   _orderGames(games) {
     //no need to sort list of games if <= 1
-    if (games!== undefined && games.length > 1) {
+    if (games !== undefined && games.length > 1) {
       let gamesFinalized = [];
       let gamesInProgress = [];
       let gamesNotStarted = [];
@@ -72,13 +68,12 @@ class Search extends React.Component {
           ? gamesInProgress.push(game)
           : gamesNotStarted.push(game);
       });
-      //no need to sort list of games not started if <= 1      
-      if (gamesNotStarted.length > 1){
-        gamesNotStarted.sort((a, b) => Moment(a.status,"HH:mm AA") - Moment(b.status,"HH:mm AA"));
+      //no need to sort list of games not started if <= 1
+      if (gamesNotStarted.length > 1) {
+        gamesNotStarted.sort(
+          (a, b) => Moment(a.status, "HH:mm AA") - Moment(b.status, "HH:mm AA")
+        );
       }
-      
-     
-      
       games = gamesFinalized.concat(gamesInProgress).concat(gamesNotStarted);
     }
     return games;
@@ -137,32 +132,35 @@ class Search extends React.Component {
               this._loadGames();
             }}
           />
+          {/*trick to load mock response on press*/}
+          <Button title="Mock" onPress={() => this._loadMockGames()} />
         </View>
         <View style={styles.gamesContainer}>
-          {this.state.games.length > 0 ? (
-            //Display list of games found for the specified date
-            //trick to load mock response on press
-            <>
-              <Text
-                style={styles.gamesTitle}
-                onPress={() => this._loadMockGames()}
-              >
-                Matchs de la nuit
-              </Text>
-              <FlatList
-                style={styles.gamesList}
-                data={this.state.games}
-                keyExtractor={(value) => value.id.toString()}
-                renderItem={(value) => <Game game={value.item} />}
-              ></FlatList>
-            </>
-          ) : (
-            //Display image and text to indicate no games were found for the specified date
-            <View style={styles.noGames}>
-              <Image style={styles.noGamesImage} source={NoGamesImage} />
-              <Text style={styles.noGamesText}>Pas de matchs cette nuit!</Text>
-            </View>
-          )}
+          {/*Display list of games found for the specified date*/}
+          <FlatList
+            style={styles.gamesList}
+            data={this.state.games}
+            keyExtractor={(value) => value.id.toString()}
+            renderItem={(value) => (<TouchableOpacity onPress={() =>
+              this.props.navigation.navigate("GameStats", { game: value.item, gameId: value.item.id, gameHomeTeamId: value.item.home_team.id, gameVisitorTeamId: value.item.visitor_team.id, gameHomeTeamFullName: value.item.home_team.full_name, gameVisitorTeamFullName: value.item.visitor_team.full_name })
+            }>
+              <Game
+                game={value.item}
+                //navigation prop added to the Game props to navigate to game stats screen onclick
+                //navigation={this.props.navigation}
+              />
+              </TouchableOpacity>
+            )}
+            ListEmptyComponent={
+              //Display image and text to indicate no games were found for the specified date
+              <View style={styles.noGames}>
+                <Image style={styles.noGamesImage} source={NoGamesImage} />
+                <Text style={styles.noGamesText}>
+                  Pas de matchs cette nuit!
+                </Text>
+              </View>
+            }
+          />
         </View>
       </View>
     );
@@ -171,7 +169,6 @@ class Search extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
     flex: 1,
     backgroundColor: "#fff",
     //alignItems: "center",

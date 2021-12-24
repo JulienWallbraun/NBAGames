@@ -4,9 +4,9 @@
     "slug": "NBAGames",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/nba-logo-transparent.png",
+    "icon": "./assets/logo.png",
     "splash": {
-      "image": "./assets/nba-logo-transparent.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
