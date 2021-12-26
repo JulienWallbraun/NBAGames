@@ -14,17 +14,16 @@ import Game from "./Game";
 import MockResponseGetGamesOnSpecificDate from "../API/mockResponseGetGamesOnSpecificDate.json";
 import NoGamesImage from "../assets/NoGames.png";
 import Moment from "moment";
+import {LargeFlatListSeparator} from "./FlatListSeparators";
 
-class Search extends React.Component {
+class GamesList extends React.Component {
   constructor(props) {
     super(props);
     this._date = new Date();
     this.state = {
       games: [],
-
-      //for date picker
+      //to display or not the date picker
       show: false,
-      //end for date picker
     };
     this._loadGames();
   }
@@ -138,17 +137,27 @@ class Search extends React.Component {
         <View style={styles.gamesContainer}>
           {/*Display list of games found for the specified date*/}
           <FlatList
-            style={styles.gamesList}
             data={this.state.games}
+            ItemSeparatorComponent={LargeFlatListSeparator}
             keyExtractor={(value) => value.id.toString()}
-            renderItem={(value) => (<TouchableOpacity onPress={() =>
-              this.props.navigation.navigate("GameStats", { game: value.item, gameId: value.item.id, gameHomeTeamId: value.item.home_team.id, gameVisitorTeamId: value.item.visitor_team.id, gameHomeTeamFullName: value.item.home_team.full_name, gameVisitorTeamFullName: value.item.visitor_team.full_name })
-            }>
-              <Game
-                game={value.item}
-                //navigation prop added to the Game props to navigate to game stats screen onclick
-                //navigation={this.props.navigation}
-              />
+            renderItem={(value) => (
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate("GameStats", {
+                    game: value.item,
+                    gameId: value.item.id,
+                    gameHomeTeamId: value.item.home_team.id,
+                    gameVisitorTeamId: value.item.visitor_team.id,
+                    gameHomeTeamFullName: value.item.home_team.full_name,
+                    gameVisitorTeamFullName: value.item.visitor_team.full_name,
+                  })
+                }
+              >
+                <Game
+                  game={value.item}
+                  //navigation prop added to the Game props to navigate to game stats screen onclick
+                  //navigation={this.props.navigation}
+                />
               </TouchableOpacity>
             )}
             ListEmptyComponent={
@@ -170,14 +179,13 @@ class Search extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    //alignItems: "center",
+    backgroundColor: "#FFFFFF",
     justifyContent: "center",
   },
   searchContainer: {
-    alignContent: "center",
     justifyContent: "center",
     flexDirection: "row",
+    margin: 4,
   },
   date: {
     width: 100,
@@ -186,16 +194,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   gamesContainer: {
-    flex: 1,
-  },
-  gamesTitle: {
-    fontSize: 25,
-    fontWeight: "bold",
-    alignItems: "center",
-    textAlign: "center",
-    margin: 10,
-  },
-  gamesList: {
     flex: 1,
   },
   noGames: {
@@ -214,4 +212,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Search;
+export default GamesList;

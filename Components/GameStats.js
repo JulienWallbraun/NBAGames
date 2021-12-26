@@ -6,47 +6,58 @@ import {
   Image,
   FlatList,
   ScrollView,
+  Button,
 } from "react-native";
-import { Button, TextInput } from "react-native-web";
 import { getPlayersStatsByGame } from "../API/FreeNBAAPI";
-import TeamStats from "./TeamStats";
-import PlayerStats from "./PlayerStats";
+import TeamGlobalStats from "./TeamGlobalStats";
+import TeamPlayersStats from "./TeamPlayersStats";
 import MockResponseGetPlayersStatsOnSpecificGame from "../API/mockResponseGetPlayersStatsOnSpecificGame.json";
-import Game from "./Game";
 import Moment from "moment";
+import {
+  SmallFlatListSeparator,
+  LargeFlatListSeparator,
+} from "./FlatListSeparators";
 
 class GamesStats extends React.Component {
   constructor(props) {
     super(props);
-    console.log("contructor game stats");
     this.state = {
       playersStats: { home: [], visitor: [] },
       homeTeamStats: {},
       visitorTeamStats: {},
     };
-    this._loadPlayersStats();
+    this._loadGameStats();
   }
 
-  _loadPlayersStats() {
+  _loadGameStats() {
     getPlayersStatsByGame(this.props.route.params.gameId).then((response) => {
       let playersStatsSplittedPerTeam = this._getPlayersStatsSplittedPerTeam(
         response.data
       );
-      this.setState({ playersStats: playersStatsSplittedPerTeam });
-      console.log("stats per team splitted");
       //get global stats per team
-      let homeTeamStats = this._getGlobalStats(this.state.playersStats.home);
-      let visitorTeamStats = this._getGlobalStats(this.state.playersStats.visitor);
-      this.setState({ homeTeamStats: homeTeamStats, visitorTeamStats: visitorTeamStats});
-      console.log("SSSSSSSSSSSSSSSSSTTTTTTTTTTTTTTTTTTATE");
-      console.log(this.state.homeTeamStats);
-      console.log(this.state.visitorTeamStats);
+      let homeTeamStats = this._getGlobalStats(playersStatsSplittedPerTeam.home);
+      let visitorTeamStats = this._getGlobalStats(
+        playersStatsSplittedPerTeam.visitor
+      );
+      this.setState({
+        playersStats: playersStatsSplittedPerTeam,
+        homeTeamStats: homeTeamStats,
+        visitorTeamStats: visitorTeamStats,
+      });
     });
   }
 
-  _loadMockPlayersStats() {
+  _loadMockGameStats() {
+    let playersStatsSplittedPerTeam =this._getPlayersStatsSplittedPerTeam(MockResponseGetPlayersStatsOnSpecificGame.data);
+    //get global stats per team
+    let homeTeamStats = this._getGlobalStats(playersStatsSplittedPerTeam.home);
+    let visitorTeamStats = this._getGlobalStats(
+      playersStatsSplittedPerTeam.visitor
+    );
     this.setState({
-      playersStats: MockResponseGetPlayersStatsOnSpecificGame.data,
+      playersStats: playersStatsSplittedPerTeam,
+      homeTeamStats: homeTeamStats,
+      visitorTeamStats: visitorTeamStats,
     });
   }
 
@@ -62,11 +73,11 @@ class GamesStats extends React.Component {
           element.min.toString() != "0:00"
         ) {
           //specific case if player min is round to 60 seconds ex : "34:60" then round to the next minute "35:00"
-          if (element.min.toString().indexOf(":60") != -1){
+          if (element.min.toString().indexOf(":60") != -1) {
             let index = element.min.toString().indexOf(":60");
             let minutes = element.min.toString().substring(0, index);
             minutes = (parseInt(minutes) + 1).toString();
-            let realTimePlayed = minutes+":00";
+            let realTimePlayed = minutes + ":00";
             element.min = realTimePlayed;
           }
           switch (element.team.id.toString()) {
@@ -89,7 +100,8 @@ class GamesStats extends React.Component {
     //no need to sort list of games not started if <= 1
     if (playersStats.length > 1) {
       playersStats.sort(
-        (a, b) => Moment(b.min, "mm:ss") - Moment(a.min, "mm:ss"));
+        (a, b) => Moment(b.min, "mm:ss") - Moment(a.min, "mm:ss")
+      );
     }
   }
 
@@ -97,10 +109,13 @@ class GamesStats extends React.Component {
     let globalStats = {
       fgm: 0,
       fga: 0,
+      fg_pct: 0.0,
       fg3m: 0,
       fg3a: 0,
+      fg3_pct: 0.0,
       ftm: 0,
       fta: 0,
+      ft_pct: 0.0,
       oreb: 0,
       dreb: 0,
       reb: 0,
@@ -110,9 +125,8 @@ class GamesStats extends React.Component {
       turnover: 0,
       blk: 0,
       pts: 0,
-     };
+    };
     if (playersStats.length > 0) {
-      
       playersStats.forEach((element) => {
         globalStats.fgm += parseInt(element.fgm);
         globalStats.fga += parseInt(element.fga);
@@ -130,29 +144,39 @@ class GamesStats extends React.Component {
         globalStats.blk += parseInt(element.blk);
         globalStats.pts += parseInt(element.pts);
       });
-      console.log("let totalTeamPerStat");
-      console.log( globalStats);
-      /*this.setState({ pts: pts });
-      console.log("STATE totalTeamPerStat");
-      console.log(this.state.pts);*/
+      //Not possible to divide by 0 : percentage = 0 if attempts =0
+      globalStats.fga != 0
+        ? (globalStats.fg_pct = globalStats.fgm / globalStats.fga)
+        : 0;
+      globalStats.fg3a != 0
+        ? (globalStats.fg3_pct = globalStats.fg3m / globalStats.fg3a)
+        : 0;
+      globalStats.fta != 0
+        ? (globalStats.ft_pct = globalStats.ftm / globalStats.fta)
+        : 0;
     }
-    console.log("fin get total stats");
-    return globalStats
+    return globalStats;
   }
 
   render() {
-    console.log("render game stats");
     return (
       <View>
-        <ScrollView stickyHeaderIndices={[0]}>
-          <Game game={this.props.route.params.game} />
-          <TeamStats
+        <ScrollView>
+          <Button title="Mock" onPress={() => this._loadMockGameStats()} />
+          <TeamGlobalStats
+            game={this.props.route.params.game}
+            homeTeamStats={this.state.homeTeamStats}
+            visitorTeamStats={this.state.visitorTeamStats}
+          />
+          {LargeFlatListSeparator()}
+          <TeamPlayersStats
             teamId={this.props.route.params.gameHomeTeamId}
             teamFullName={this.props.route.params.gameHomeTeamFullName}
             playersStats={this.state.playersStats.home}
             teamStats={this.state.homeTeamStats}
           />
-          <TeamStats
+          {LargeFlatListSeparator()}
+          <TeamPlayersStats
             teamId={this.props.route.params.gameVisitorTeamId}
             teamFullName={this.props.route.params.gameVisitorTeamFullName}
             playersStats={this.state.playersStats.visitor}
@@ -164,15 +188,8 @@ class GamesStats extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  gameStats: {
-    //flex: 0,
-  },
-  playerStatsCell: {
-    width: 40,
-    textAlign: "center",
-    textAlignVertical: "center",
-    margin: 5,
-    flex: 1,
+  container: {
+    //backgroundColor: "orange",
   },
 });
 
