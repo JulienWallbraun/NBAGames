@@ -4,6 +4,7 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GamesList from "./GamesList";
 import GameStats from "./GameStats";
+import i18n from 'i18n-js';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,8 +27,8 @@ class Navigation extends React.Component {
                 fontSize: 25,
               },
             }}>          
-            <Stack.Screen name="GamesList" options={{ title: 'Matchs de la nuit' }} component={GamesList} />
-            <Stack.Screen name="GameStats" options={{ title: 'Stats du match' }} component={GameStats} />        
+            <Stack.Screen name="GamesList" options={{ title: i18n.t('gamesListTitle') }} component={GamesList} />
+            <Stack.Screen name="GameStats" options={{ title: i18n.t('gameStatsTtile') }} component={GameStats} />        
         </Stack.Navigator>
       </NavigationContainer>
     );

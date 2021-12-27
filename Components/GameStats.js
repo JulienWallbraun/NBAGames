@@ -14,9 +14,9 @@ import TeamPlayersStats from "./TeamPlayersStats";
 import MockResponseGetPlayersStatsOnSpecificGame from "../API/mockResponseGetPlayersStatsOnSpecificGame.json";
 import Moment from "moment";
 import {
-  SmallFlatListSeparator,
   LargeFlatListSeparator,
 } from "./FlatListSeparators";
+import i18n from 'i18n-js';
 
 class GamesStats extends React.Component {
   constructor(props) {
@@ -162,7 +162,9 @@ class GamesStats extends React.Component {
     return (
       <View>
         <ScrollView>
-          <Button title="Mock" onPress={() => this._loadMockGameStats()} />
+          {/*trick to load mock response on press*/
+          MOCK_API_RESPONSE && (
+          <Button title={i18n.t('mockButtonTitle')} onPress={() => this._loadMockGameStats()} />)}
           <TeamGlobalStats
             game={this.props.route.params.game}
             homeTeamStats={this.state.homeTeamStats}

@@ -14,11 +14,15 @@ import Game from "./Game";
 import MockResponseGetGamesOnSpecificDate from "../API/mockResponseGetGamesOnSpecificDate.json";
 import NoGamesImage from "../assets/NoGames.png";
 import Moment from "moment";
-import {LargeFlatListSeparator} from "./FlatListSeparators";
+import "moment/min/locales.min";
+import { LargeFlatListSeparator } from "./FlatListSeparators";
+import i18n from "i18n-js";
 
 class GamesList extends React.Component {
   constructor(props) {
     super(props);
+    //Set moment locale to the device locale to display the date in the language set in the device settings
+    Moment.locale(i18n.locale);
     this._date = new Date();
     this.state = {
       games: [],
@@ -104,6 +108,17 @@ class GamesList extends React.Component {
             onChange={(e, s) => this._onChangeDatePicker(e, s)}
           />
         )}
+        {
+          /*trick to load mock response on press*/
+          MOCK_API_RESPONSE && (
+            <Button
+              title={i18n.t("mockButtonTitle")}
+              onPress={() => {
+                this._loadMockGames();
+              }}
+            />
+          )
+        }
         <View style={styles.searchContainer}>
           <Button
             color="#000000"
@@ -120,7 +135,7 @@ class GamesList extends React.Component {
               this.setState({ show: true });
             }}
           >
-            <Text>{this._date.toLocaleDateString()}</Text>
+            <Text>{Moment(this._date).format("LL")}</Text>
           </TouchableOpacity>
 
           <Button
@@ -131,8 +146,6 @@ class GamesList extends React.Component {
               this._loadGames();
             }}
           />
-          {/*trick to load mock response on press*/}
-          <Button title="Mock" onPress={() => this._loadMockGames()} />
         </View>
         <View style={styles.gamesContainer}>
           {/*Display list of games found for the specified date*/}
@@ -164,9 +177,7 @@ class GamesList extends React.Component {
               //Display image and text to indicate no games were found for the specified date
               <View style={styles.noGames}>
                 <Image style={styles.noGamesImage} source={NoGamesImage} />
-                <Text style={styles.noGamesText}>
-                  Pas de matchs cette nuit!
-                </Text>
+                <Text style={styles.noGamesText}>{i18n.t("noGamesInfo")}</Text>
               </View>
             }
           />
@@ -188,7 +199,7 @@ const styles = StyleSheet.create({
     margin: 4,
   },
   date: {
-    width: 100,
+    width: 150,
     backgroundColor: "#EEEEEE",
     justifyContent: "center",
     alignItems: "center",

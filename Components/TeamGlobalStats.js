@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Game from "./Game";
 import { SmallFlatListSeparator } from "./FlatListSeparators";
+import i18n from 'i18n-js';
 
 class GamesStats extends React.Component {
   constructor(props) {
@@ -211,7 +212,7 @@ class GamesStats extends React.Component {
                 {this.props.homeTeamStats.fgm}/{this.props.homeTeamStats.fga} (
                 {Math.round(this.props.homeTeamStats.fg_pct * 100)}%)
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>Tirs (%)</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('shotsAndPercentageTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
@@ -234,7 +235,7 @@ class GamesStats extends React.Component {
                 {this.props.homeTeamStats.fg3m}/{this.props.homeTeamStats.fg3a}{" "}
                 ({Math.round(this.props.homeTeamStats.fg3_pct * 100)}%)
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>3pts (%)</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('threesShotsAndPercentageTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
@@ -257,7 +258,7 @@ class GamesStats extends React.Component {
                 {this.props.homeTeamStats.ftm}/{this.props.homeTeamStats.fta} (
                 {Math.round(this.props.homeTeamStats.ft_pct * 100)}%)
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>Lancers-francs (%)</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('freeThrowsAndPercentageTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
@@ -280,7 +281,7 @@ class GamesStats extends React.Component {
                 {this.props.homeTeamStats.reb} ({this.props.homeTeamStats.oreb}/
                 {this.props.homeTeamStats.dreb})
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>Rebonds (O/D)</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('reboundsOffensiveAndDefensiveTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
@@ -302,7 +303,7 @@ class GamesStats extends React.Component {
               >
                 {this.props.homeTeamStats.ast}
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>Passes décisives</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('assistsTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
@@ -317,32 +318,12 @@ class GamesStats extends React.Component {
               <Text
                 style={[
                   styles.teamGlobalStat,
-                  this._isHomeTeamBestPf() && styles.bestTeam,
-                ]}
-              >
-                {this.props.homeTeamStats.pf}
-              </Text>
-              <Text style={styles.teamGlobalStatTitle}>Fautes</Text>
-              <Text
-                style={[
-                  styles.teamGlobalStat,
-                  this._isVisitorTeamBestPf() && styles.bestTeam,
-                ]}
-              >
-                {this.props.visitorTeamStats.pf}
-              </Text>
-            </View>
-            {SmallFlatListSeparator()}
-            <View style={{ flexDirection: "row", flex: 1 }}>
-              <Text
-                style={[
-                  styles.teamGlobalStat,
                   this._isHomeTeamBestStl() && styles.bestTeam,
                 ]}
               >
                 {this.props.homeTeamStats.stl}
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>Interceptions</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('stealsTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
@@ -357,12 +338,32 @@ class GamesStats extends React.Component {
               <Text
                 style={[
                   styles.teamGlobalStat,
+                  this._isHomeTeamBestBlk() && styles.bestTeam,
+                ]}
+              >
+                {this.props.homeTeamStats.blk}
+              </Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('blocksTitle')}</Text>
+              <Text
+                style={[
+                  styles.teamGlobalStat,
+                  this._isVisitorTeamBestBlk() && styles.bestTeam,
+                ]}
+              >
+                {this.props.visitorTeamStats.blk}
+              </Text>
+            </View>
+            {SmallFlatListSeparator()}
+            <View style={{ flexDirection: "row", flex: 1 }}>
+              <Text
+                style={[
+                  styles.teamGlobalStat,
                   this._isHomeTeamBestTurnover() && styles.bestTeam,
                 ]}
               >
                 {this.props.homeTeamStats.turnover}
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>Balles perdues</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('turnoversTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
@@ -377,19 +378,19 @@ class GamesStats extends React.Component {
               <Text
                 style={[
                   styles.teamGlobalStat,
-                  this._isHomeTeamBestBlk() && styles.bestTeam,
+                  this._isHomeTeamBestPf() && styles.bestTeam,
                 ]}
               >
-                {this.props.homeTeamStats.blk}
+                {this.props.homeTeamStats.pf}
               </Text>
-              <Text style={styles.teamGlobalStatTitle}>Contres</Text>
+              <Text style={styles.teamGlobalStatTitle}>{i18n.t('foulsTitle')}</Text>
               <Text
                 style={[
                   styles.teamGlobalStat,
-                  this._isVisitorTeamBestBlk() && styles.bestTeam,
+                  this._isVisitorTeamBestPf() && styles.bestTeam,
                 ]}
               >
-                {this.props.visitorTeamStats.blk}
+                {this.props.visitorTeamStats.pf}
               </Text>
             </View>
           </View>
@@ -403,11 +404,13 @@ const styles = StyleSheet.create({
     flex: 5,
     textAlign: "center",
     textAlignVertical: "center",
+    margin: 5,
   },
   teamGlobalStatTitle: {
-    flex: 4,
+    flex: 5,
     textAlign: "center",
     textAlignVertical: "center",
+    margin: 5,
   },
   bestTeam: {
     fontWeight: "bold",

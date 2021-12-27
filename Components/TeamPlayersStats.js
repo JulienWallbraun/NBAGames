@@ -12,8 +12,8 @@ import PlayerStats from "./PlayerStats";
 import Logo from "./Logo";
 import NoStatsImage from "../assets/NoGames.png";
 import Styles from "./Styles";
-import Game from "./Game";
-import {SmallFlatListSeparator, LargeFlatListSeparator} from "./FlatListSeparators";
+import { SmallFlatListSeparator } from "./FlatListSeparators";
+import i18n from "i18n-js";
 
 class TeamPlayersStats extends React.Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class TeamPlayersStats extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <TouchableOpacity
-          style={{ flexDirection: "row",  backgroundColor:"#EEEEEE"}}
+          style={{ flexDirection: "row", backgroundColor: "#EEEEEE" }}
           onPress={() => this.setState({ show: !this.state.show })}
         >
           <Logo teamId={this.props.teamId} />
@@ -43,65 +43,139 @@ class TeamPlayersStats extends React.Component {
                 <FlatList
                   style={styles.gameStats}
                   data={this.props.playersStats}
-                  ItemSeparatorComponent={<View
-                    style={{
-                      height: 1,
-                      width: "100%",
-                      backgroundColor: "#000",
-                    }}
-                  />}
+                  ItemSeparatorComponent={
+                    <View
+                      style={{
+                        height: 1,
+                        width: "100%",
+                        backgroundColor: "#000",
+                      }}
+                    />
+                  }
                   ItemSeparatorComponent={SmallFlatListSeparator}
                   ListHeaderComponent={
                     <View style={styles.headerAndFooterComponent}>
                       <Text
-                        style={[Styles.playerStatsCell,
+                        style={[
+                          Styles.playerStatsCell,
                           Styles.playerStatsCellName,
-                          styles.playerStatsCellHeaderAndFooterTextColor
+                          styles.playerStatsCellHeaderAndFooterTextColor,
                         ]}
                       >
-                        Joueurs
+                        {i18n.t("playersHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Min
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("minutesHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Tirs
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          Styles.playerStatsCellPoints,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("pointsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        3pts
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("reboundsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        LF
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("assistsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        RO
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("stealsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        RD
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("blocksHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Reb
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("shotsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Pd
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("threesShotsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Fte
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("freeThrowsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Int
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("reboundsOffensiveHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Bp
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("reboundsDefensiveHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Ct
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("turnoversHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Pts
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("foulsHeader")}
                       </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        Eval
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {i18n.t("evaluationHeader")}
                       </Text>
                     </View>
                   }
@@ -111,55 +185,122 @@ class TeamPlayersStats extends React.Component {
                   ListFooterComponent={
                     <View style={styles.headerAndFooterComponent}>
                       <Text
-                        style={[Styles.playerStatsCell,
+                        style={[
+                          Styles.playerStatsCell,
                           Styles.playerStatsCellName,
-                          styles.playerStatsCellHeaderAndFooterTextColor
+                          styles.playerStatsCellHeaderAndFooterTextColor,
                         ]}
                       >
-                        TOTAL
+                        {i18n.t('totalFooter')}
                       </Text>
                       <Text
-                        style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
                       ></Text>
-
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.fgm}/{teamStats.fga}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.fg3m}/{teamStats.fg3a}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.ftm}/{teamStats.fta}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.oreb}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.dreb}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.reb}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.ast}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.pf}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.stl}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.turnover}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
-                        {teamStats.blk}
-                      </Text>
-                      <Text style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          Styles.playerStatsCellPoints,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
                         {teamStats.pts}
                       </Text>
                       <Text
-                        style={[Styles.playerStatsCell, styles.playerStatsCellHeaderAndFooterTextColor]}
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.reb}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.ast}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.stl}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.blk}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.fgm}/{teamStats.fga}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.fg3m}/{teamStats.fg3a}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.ftm}/{teamStats.fta}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.oreb}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.dreb}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.turnover}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
+                      >
+                        {teamStats.pf}
+                      </Text>
+                      <Text
+                        style={[
+                          Styles.playerStatsCell,
+                          styles.playerStatsCellHeaderAndFooterTextColor,
+                        ]}
                       ></Text>
                     </View>
                   }
@@ -175,7 +316,7 @@ class TeamPlayersStats extends React.Component {
                         source={NoStatsImage}
                       />
                       <Text style={styles.noGamesText}>
-                        Pas de stats pour cette équipe!
+                        {i18n.t("noStatsInfo")}
                       </Text>
                     </View>
                   }

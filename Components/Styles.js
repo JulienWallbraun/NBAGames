@@ -13,4 +13,7 @@ export default StyleSheet.create({
         textAlign: "left",
         flex: 5,
       },
+      playerStatsCellPoints: {
+        fontWeight: 'bold',
+      },
 });
