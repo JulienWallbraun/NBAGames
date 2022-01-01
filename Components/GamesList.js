@@ -21,8 +21,6 @@ import i18n from "i18n-js";
 class GamesList extends React.Component {
   constructor(props) {
     super(props);
-    //Set moment locale to the device locale to display the date in the language set in the device settings
-    Moment.locale(i18n.locale);
     this._date = new Date();
     this.state = {
       games: [],
@@ -96,6 +94,15 @@ class GamesList extends React.Component {
     this.setState({ show: false });
   }
 
+  //trick to get date with week day, date day, month and year and without hour using Moment, as DateToLocaleString doesn't work well on Android
+  getDate(){
+    let date = Moment(this._date);
+    let llll = date.format( 'LLLL' );
+    let lll = date.format( 'LLL' );
+    let ll = date.format( 'LL' );
+    return llll.replace( lll.replace( ll, '' ), '' );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -130,12 +137,12 @@ class GamesList extends React.Component {
           />
 
           <TouchableOpacity
-            style={styles.date}
+            style={styles.dateTouchableContainer}
             onPress={() => {
               this.setState({ show: true });
             }}
           >
-            <Text>{Moment(this._date).format("LL")}</Text>
+            <Text style={styles.dateText}>{this.getDate()}</Text>
           </TouchableOpacity>
 
           <Button
@@ -198,11 +205,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     margin: 4,
   },
-  date: {
-    width: 150,
+  dateTouchableContainer: {
+    width: 200,
     backgroundColor: "#EEEEEE",
     justifyContent: "center",
     alignItems: "center",
+  },
+  dateText: {
+    textAlign: "center",
   },
   gamesContainer: {
     flex: 1,
