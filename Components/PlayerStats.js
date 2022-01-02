@@ -27,7 +27,7 @@ class PlayerStats extends React.Component {
     const playerStats = this.props.playerStats;
     return (
       <View style={styles.playerStatsContainer}>
-        <Text style={[Styles.playerStatsCell, Styles.playerStatsCellName]}>
+        <Text style={[Styles.playerStatsCell, Styles.playerStatsCellName]}>          
           {playerStats.player.first_name} {playerStats.player.last_name}
         </Text>
         <Text style={Styles.playerStatsCell}>{playerStats.min}</Text>

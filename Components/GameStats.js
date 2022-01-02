@@ -2,21 +2,19 @@ import React from "react";
 import {
   StyleSheet,
   View,
-  Text,
-  Image,
-  FlatList,
   ScrollView,
   Button,
+  TouchableOpacity,
 } from "react-native";
 import { getPlayersStatsByGame } from "../API/FreeNBAAPI";
 import TeamGlobalStats from "./TeamGlobalStats";
 import TeamPlayersStats from "./TeamPlayersStats";
 import MockResponseGetPlayersStatsOnSpecificGame from "../API/mockResponseGetPlayersStatsOnSpecificGame.json";
 import Moment from "moment";
-import {
-  LargeFlatListSeparator,
-} from "./FlatListSeparators";
-import i18n from 'i18n-js';
+import { LargeFlatListSeparator } from "./FlatListSeparators";
+import i18n from "i18n-js";
+import Game from "./Game";
+import TeamStatsHeader from "./TeamStatsHeader";
 
 class GamesStats extends React.Component {
   constructor(props) {
@@ -25,6 +23,9 @@ class GamesStats extends React.Component {
       playersStats: { home: [], visitor: [] },
       homeTeamStats: {},
       visitorTeamStats: {},
+      showTeamsGlobalStats: true,
+      showHomeTeamPlayersStats: true,
+      showVisitorTeamPlayersStats: true,
     };
     this._loadGameStats();
   }
@@ -35,7 +36,9 @@ class GamesStats extends React.Component {
         response.data
       );
       //get global stats per team
-      let homeTeamStats = this._getGlobalStats(playersStatsSplittedPerTeam.home);
+      let homeTeamStats = this._getGlobalStats(
+        playersStatsSplittedPerTeam.home
+      );
       let visitorTeamStats = this._getGlobalStats(
         playersStatsSplittedPerTeam.visitor
       );
@@ -48,7 +51,9 @@ class GamesStats extends React.Component {
   }
 
   _loadMockGameStats() {
-    let playersStatsSplittedPerTeam =this._getPlayersStatsSplittedPerTeam(MockResponseGetPlayersStatsOnSpecificGame.data);
+    let playersStatsSplittedPerTeam = this._getPlayersStatsSplittedPerTeam(
+      MockResponseGetPlayersStatsOnSpecificGame.data
+    );
     //get global stats per team
     let homeTeamStats = this._getGlobalStats(playersStatsSplittedPerTeam.home);
     let visitorTeamStats = this._getGlobalStats(
@@ -161,38 +166,82 @@ class GamesStats extends React.Component {
   render() {
     return (
       <View>
-        <ScrollView>
-          {/*trick to load mock response on press*/
+        {
+          /*trick to load mock response on press*/
           MOCK_API_RESPONSE && (
-          <Button title={i18n.t('mockButtonTitle')} onPress={() => this._loadMockGameStats()} />)}
-          <TeamGlobalStats
-            game={this.props.route.params.game}
-            homeTeamStats={this.state.homeTeamStats}
-            visitorTeamStats={this.state.visitorTeamStats}
-          />
+            <Button
+              title={i18n.t("mockButtonTitle")}
+              onPress={() => this._loadMockGameStats()}
+            />
+          )
+        }
+        <ScrollView stickyHeaderIndices={[0, 3, 6]}>
+          <TouchableOpacity
+            onPress={() =>
+              this.setState({
+                showTeamsGlobalStats: !this.state.showTeamsGlobalStats,
+              })
+            }
+          >
+            <Game game={this.props.route.params.game} />
+          </TouchableOpacity>
+          <>
+            {this.state.showTeamsGlobalStats && (
+              <TeamGlobalStats
+                style={{ flex: 1 }}
+                gameFinal={this.props.route.params.game.status=="Final"}
+                homeTeamStats={this.state.homeTeamStats}
+                visitorTeamStats={this.state.visitorTeamStats}
+              />
+            )}
+          </>
           {LargeFlatListSeparator()}
-          <TeamPlayersStats
-            teamId={this.props.route.params.gameHomeTeamId}
-            teamFullName={this.props.route.params.gameHomeTeamFullName}
-            playersStats={this.state.playersStats.home}
-            teamStats={this.state.homeTeamStats}
-          />
+          <TouchableOpacity
+            onPress={() =>
+              this.setState({
+                showHomeTeamPlayersStats: !this.state.showHomeTeamPlayersStats,
+              })
+            }
+          >
+            <TeamStatsHeader
+              game={this.props.route.params.gameHomeTeamId}
+              gameFullName={this.props.route.params.gameHomeTeamFullName}
+            />
+          </TouchableOpacity>
+          <>
+            {this.state.showHomeTeamPlayersStats && (
+              <TeamPlayersStats
+                playersStats={this.state.playersStats.home}
+                teamStats={this.state.homeTeamStats}
+              />
+            )}
+          </>
           {LargeFlatListSeparator()}
-          <TeamPlayersStats
-            teamId={this.props.route.params.gameVisitorTeamId}
-            teamFullName={this.props.route.params.gameVisitorTeamFullName}
-            playersStats={this.state.playersStats.visitor}
-            teamStats={this.state.visitorTeamStats}
-          />
+          <TouchableOpacity
+            onPress={() =>
+              this.setState({
+                showVisitorTeamPlayersStats:
+                  !this.state.showVisitorTeamPlayersStats,
+              })
+            }
+          >
+            <TeamStatsHeader
+              game={this.props.route.params.gameVisitorTeamId}
+              gameFullName={this.props.route.params.gameVisitorTeamFullName}
+            />
+          </TouchableOpacity>
+          <>
+            {this.state.showVisitorTeamPlayersStats && (
+              <TeamPlayersStats
+                playersStats={this.state.playersStats.visitor}
+                teamStats={this.state.visitorTeamStats}
+              />
+            )}
+          </>
         </ScrollView>
       </View>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    //backgroundColor: "orange",
-  },
-});
 
 export default GamesStats;
