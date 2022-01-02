@@ -21,12 +21,9 @@ class Navigation extends React.Component {
   render() {
     return (
       <NavigationContainer theme={AppTheme}>
-        <Stack.Navigator initialRouteName="Search" screenOptions={{
-              headerTitleStyle: {
-                fontWeight: "bold",
-                fontSize: 25,
-              },
-            }}>          
+        <Stack.Navigator initialRouteName="GamesList" screenOptions={{
+              headerTitleStyle: styles.screenHeaderTitle}}
+            style={styles.screenHeaderTitle}>          
             <Stack.Screen name="GamesList" options={{ title: i18n.t('gamesListTitle') }} component={GamesList} />
             <Stack.Screen name="GameStats" options={{ title: i18n.t('gameStatsTtile') }} component={GameStats} />        
         </Stack.Navigator>
@@ -35,11 +32,9 @@ class Navigation extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  gamesTitle: {
+  screenHeaderTitle: {
     fontSize: 25,
     fontWeight: "bold",
-    alignItems: "center",
-    textAlign: "center",
   },
 });
 

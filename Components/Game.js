@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   gameContainer: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "#EDEDED",
+    backgroundColor: "#EEEEEE",
     alignItems: "center",
   },
   team: {

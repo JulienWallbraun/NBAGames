@@ -129,7 +129,7 @@ class GamesList extends React.Component {
         <View style={styles.searchContainer}>
           <Button
             color="#000000"
-            title="<"
+            title={i18n.t("previousDateButtonTitle")}
             onPress={() => {
               this._date.setDate(this._date.getDate() - 1);
               this._loadGames();
@@ -147,7 +147,7 @@ class GamesList extends React.Component {
 
           <Button
             color="#000000"
-            title=">"
+            title={i18n.t("nextDateButtonTitle")}
             onPress={() => {
               this._date.setDate(this._date.getDate() + 1);
               this._loadGames();
@@ -173,11 +173,7 @@ class GamesList extends React.Component {
                   })
                 }
               >
-                <Game
-                  game={value.item}
-                  //navigation prop added to the Game props to navigate to game stats screen onclick
-                  //navigation={this.props.navigation}
-                />
+                <Game game={value.item}/>
               </TouchableOpacity>
             )}
             ListEmptyComponent={
@@ -197,7 +193,6 @@ class GamesList extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
     justifyContent: "center",
   },
   searchContainer: {
@@ -220,16 +215,16 @@ const styles = StyleSheet.create({
   noGames: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1,
   },
   noGamesImage: {
-    maxHeight: 250,
-    maxWidth: 250,
+    height: 250,
+    width: 250,
     resizeMode: "contain",
+    margin: 20,
   },
   noGamesText: {
     fontSize: 25,
-    margin: 20,
+    marginHorizontal: 20,
   },
 });
 
