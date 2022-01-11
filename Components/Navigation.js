@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GamesList from "./GamesList";
 import GameStats from "./GameStats";
 import i18n from 'i18n-js';
+import { Colors } from "./Colors";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,7 @@ const AppTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    background:'#FFFFFF'
+    background:Colors.backgroundColorPrimary
   },
 };
 

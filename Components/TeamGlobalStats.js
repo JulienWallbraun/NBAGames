@@ -169,7 +169,7 @@ class GamesStats extends React.Component {
   render() {
     return (
       <View>
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -179,7 +179,7 @@ class GamesStats extends React.Component {
             {this.props.homeTeamStats.fgm}/{this.props.homeTeamStats.fga} (
             {Math.round(this.props.homeTeamStats.fg_pct * 100)}%)
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("shotsAndPercentageTitle")}
           </Text>
           <Text
@@ -193,7 +193,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -203,7 +203,7 @@ class GamesStats extends React.Component {
             {this.props.homeTeamStats.fg3m}/{this.props.homeTeamStats.fg3a} (
             {Math.round(this.props.homeTeamStats.fg3_pct * 100)}%)
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("threesShotsAndPercentageTitle")}
           </Text>
           <Text
@@ -218,7 +218,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -228,7 +228,7 @@ class GamesStats extends React.Component {
             {this.props.homeTeamStats.ftm}/{this.props.homeTeamStats.fta} (
             {Math.round(this.props.homeTeamStats.ft_pct * 100)}%)
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("freeThrowsAndPercentageTitle")}
           </Text>
           <Text
@@ -242,7 +242,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -252,7 +252,7 @@ class GamesStats extends React.Component {
             {this.props.homeTeamStats.reb} ({this.props.homeTeamStats.oreb}/
             {this.props.homeTeamStats.dreb})
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("reboundsOffensiveAndDefensiveTitle")}
           </Text>
           <Text
@@ -267,7 +267,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -276,7 +276,7 @@ class GamesStats extends React.Component {
           >
             {this.props.homeTeamStats.ast}
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("assistsTitle")}
           </Text>
           <Text
@@ -289,7 +289,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -298,7 +298,7 @@ class GamesStats extends React.Component {
           >
             {this.props.homeTeamStats.stl}
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("stealsTitle")}
           </Text>
           <Text
@@ -311,7 +311,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -320,7 +320,7 @@ class GamesStats extends React.Component {
           >
             {this.props.homeTeamStats.blk}
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("blocksTitle")}
           </Text>
           <Text
@@ -333,7 +333,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -342,7 +342,7 @@ class GamesStats extends React.Component {
           >
             {this.props.homeTeamStats.turnover}
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>
+          <Text style={styles.teamGlobalStat}>
             {i18n.t("turnoversTitle")}
           </Text>
           <Text
@@ -355,7 +355,7 @@ class GamesStats extends React.Component {
           </Text>
         </View>
         {SmallFlatListSeparator()}
-        <View style={{ flexDirection: "row", flex: 1 }}>
+        <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -364,7 +364,7 @@ class GamesStats extends React.Component {
           >
             {this.props.homeTeamStats.pf}
           </Text>
-          <Text style={styles.teamGlobalStatTitle}>{i18n.t("foulsTitle")}</Text>
+          <Text style={styles.teamGlobalStat}>{i18n.t("foulsTitle")}</Text>
           <Text
             style={[
               styles.teamGlobalStat,
@@ -379,13 +379,11 @@ class GamesStats extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  teamGlobalStat: {
-    flex: 5,
-    textAlign: "center",
-    textAlignVertical: "center",
-    margin: 5,
+  rowGameGlobalStat:{
+    flexDirection: "row",
+    flex: 1
   },
-  teamGlobalStatTitle: {
+  teamGlobalStat: {
     flex: 5,
     textAlign: "center",
     textAlignVertical: "center",

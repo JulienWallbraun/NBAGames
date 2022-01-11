@@ -5,6 +5,7 @@ import {
   Text,
 } from "react-native";
 import Logo from "./Logo";
+import { Colors } from "./Colors";
 
 class TeamStatsHeader extends React.Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class TeamStatsHeader extends React.Component {
 const styles = StyleSheet.create({
   teamStatsHeader: { 
     flexDirection: "row", 
-    backgroundColor:"#EEEEEE"},
+    backgroundColor: Colors.backgroundColorSecondary},
 });
 
 export default TeamStatsHeader;

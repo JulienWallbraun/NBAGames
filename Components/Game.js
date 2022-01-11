@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 import Moment from "moment-timezone";
 import Logo from "./Logo";
+import { Colors } from "./Colors";
 
 class Game extends React.Component {
 
@@ -139,12 +140,12 @@ const styles = StyleSheet.create({
   gameContainer: {
     flex: 1,
     flexDirection: "row",
-    backgroundColor: "#EEEEEE",
+    backgroundColor: Colors.backgroundColorSecondary,
     alignItems: "center",
   },
   team: {
     flex: 5,
-    color: "#000000",
+    color: Colors.fontColorPrimary,
   },
   homeTeam: {
     textAlign: "right",
@@ -163,16 +164,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     justifyContent: "center",
     fontSize: 16,
-    color: "#FFFFFF",
+    color: Colors.fontColorSecondary,
   },
   gameStatusFinal: {
-    backgroundColor: "#000000",
+    backgroundColor: Colors.backgroundColorGameStatusFinal,
   },
   gameStatusInProgress: {
-    backgroundColor: "#DF0000",
+    backgroundColor: Colors.backgroundColorGameStatusInProgress,
   },
   gameStatusNotStarted: {
-    backgroundColor: "#88888888",
+    backgroundColor: Colors.backgroundColorGameStatusNotStarted,
   },
   gameInProgressTime: {
     fontSize: 10,

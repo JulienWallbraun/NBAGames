@@ -17,6 +17,7 @@ import Moment from "moment";
 import "moment/min/locales.min";
 import { LargeFlatListSeparator } from "./FlatListSeparators";
 import i18n from "i18n-js";
+import { Colors } from "./Colors";
 
 class GamesList extends React.Component {
   constructor(props) {
@@ -128,7 +129,7 @@ class GamesList extends React.Component {
         }
         <View style={styles.searchContainer}>
           <Button
-            color="#000000"
+            color={Colors.backgroundColorButtonPrimary}
             title={i18n.t("previousDateButtonTitle")}
             onPress={() => {
               this._date.setDate(this._date.getDate() - 1);
@@ -146,7 +147,7 @@ class GamesList extends React.Component {
           </TouchableOpacity>
 
           <Button
-            color="#000000"
+            color={Colors.backgroundColorButtonPrimary}
             title={i18n.t("nextDateButtonTitle")}
             onPress={() => {
               this._date.setDate(this._date.getDate() + 1);
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
   },
   dateTouchableContainer: {
     width: 200,
-    backgroundColor: "#EEEEEE",
+    backgroundColor: Colors.backgroundColorSecondary,
     justifyContent: "center",
     alignItems: "center",
   },

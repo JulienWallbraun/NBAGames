@@ -12,6 +12,7 @@ import NoStatsImage from "../assets/NoStats.png";
 import Styles from "./Styles";
 import { SmallFlatListSeparator } from "./FlatListSeparators";
 import i18n from "i18n-js";
+import { Colors } from "./Colors";
 
 class TeamPlayersStats extends React.Component {
   render() {
@@ -147,7 +148,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
             </View>
           }
-          ListHeaderComponentStyle={{ backgroundColor: "#000000" }}
+          ListHeaderComponentStyle={styles.headerComponentBackground}
           ListFooterComponent={
             <View style={styles.headerAndFooterComponent}>
               <Text
@@ -270,13 +271,13 @@ class TeamPlayersStats extends React.Component {
               ></Text>
             </View>
           }
-          ListFooterComponentStyle={{ backgroundColor: "#AAAAAA" }}
+          ListFooterComponentStyle={styles.footerComponentBackground}
           keyExtractor={(value) => value.id.toString()}
           renderItem={(value) => <PlayerStats playerStats={value.item} />}
           ListEmptyComponent={
             <View>
               <Image style={styles.noStatsImage} source={NoStatsImage} />
-              <Text>{i18n.t("noStatsInfo")}</Text>
+              <Text style={styles.noStatsText}>{i18n.t("noStatsInfo")}</Text>
             </View>
           }
         />
@@ -290,12 +291,21 @@ const styles = StyleSheet.create({
     width: 50,
     resizeMode: "contain",
   },
+  noStatsText: {
+    marginHorizontal: 5,
+  },
   headerAndFooterComponent: {
     flexDirection: "row",
   },
   playerStatsCellHeaderAndFooterTextColor: {
-    color: "#FFFFFF",
+    color: Colors.fontColorSecondary,
   },
+  headerComponentBackground: {
+    backgroundColor: Colors.backgroundColorHeaderPrimary
+  },
+  footerComponentBackground: {
+    backgroundColor: Colors.backgroundColorHeaderSecondary
+  }
 });
 
 export default TeamPlayersStats;

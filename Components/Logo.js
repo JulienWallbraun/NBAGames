@@ -141,10 +141,8 @@ const styles = StyleSheet.create({
   logo: {
     minHeight: 35,
     minWidth: 35,
-    //height: 35,
     maxHeight: 45,
     maxWidth: 45,
-    //flex: 10,
     margin: 10,
     resizeMode: "contain",
   },
