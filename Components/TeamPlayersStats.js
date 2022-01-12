@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import PlayerStats from "./PlayerStats";
 import NoStatsImage from "../assets/NoStats.png";
-import Styles from "./Styles";
+import StylesPlayersStatsCells from "./StylesPlayersStatsCells";
 import { SmallFlatListSeparator } from "./FlatListSeparators";
 import i18n from "i18n-js";
 import { Colors } from "./Colors";
@@ -26,8 +26,8 @@ class TeamPlayersStats extends React.Component {
             <View style={styles.headerAndFooterComponent}>
               <Text
                 style={[
-                  Styles.playerStatsCell,
-                  Styles.playerStatsCellName,
+                  StylesPlayersStatsCells.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCellName,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -35,7 +35,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -43,8 +43,8 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
-                  Styles.playerStatsCellPoints,
+                  StylesPlayersStatsCells.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCellPoints,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -52,7 +52,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -60,7 +60,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -68,7 +68,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -76,7 +76,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -84,7 +84,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -92,7 +92,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -100,7 +100,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -108,7 +108,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -116,7 +116,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -124,7 +124,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -132,7 +132,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -140,7 +140,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -153,8 +153,8 @@ class TeamPlayersStats extends React.Component {
             <View style={styles.headerAndFooterComponent}>
               <Text
                 style={[
-                  Styles.playerStatsCell,
-                  Styles.playerStatsCellName,
+                  StylesPlayersStatsCells.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCellName,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -162,14 +162,14 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               ></Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
-                  Styles.playerStatsCellPoints,
+                  StylesPlayersStatsCells.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCellPoints,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -177,7 +177,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -185,7 +185,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -193,7 +193,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -201,7 +201,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -209,7 +209,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -217,7 +217,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -225,7 +225,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -233,7 +233,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -241,7 +241,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -249,7 +249,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -257,7 +257,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               >
@@ -265,7 +265,7 @@ class TeamPlayersStats extends React.Component {
               </Text>
               <Text
                 style={[
-                  Styles.playerStatsCell,
+                  StylesPlayersStatsCells.playerStatsCell,
                   styles.playerStatsCellHeaderAndFooterTextColor,
                 ]}
               ></Text>
