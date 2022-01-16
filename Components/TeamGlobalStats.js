@@ -142,7 +142,7 @@ class GamesStats extends React.Component {
   _isVisitorTeamBestTurnover() {
     let result =
       this.props.gameFinal &&
-      this.props.homeTeamStats.turnover > this.props.visitorTeamStats.turnovera
+      this.props.homeTeamStats.turnover > this.props.visitorTeamStats.turnover
         ? true
         : false;
     return result;
