@@ -31,9 +31,9 @@ import Raptors from "../assets/NBA_logos/Raptors.png";
 import Jazz from "../assets/NBA_logos/Jazz.png";
 import Wizards from "../assets/NBA_logos/Wizards.png";
 
-class Logo extends React.Component {
-  _getTeamLogoFromId(id) {
-    switch (id) {
+function Logo(props) {
+  const getTeamLogoFromId = () => {
+    switch (props.teamId) {
       case 1:
         return Hawks;
         break;
@@ -125,27 +125,20 @@ class Logo extends React.Component {
         return Wizards;
         break;
     }
-  }
+  };
 
-  render() {
-    return (
-        <Image
-          style={styles.logo}
-          source={this._getTeamLogoFromId(this.props.teamId)}
-        />
-    );
-  }
+  const styles = StyleSheet.create({
+    logo: {
+      minHeight: 35,
+      minWidth: 35,
+      maxHeight: 45,
+      maxWidth: 45,
+      margin: 10,
+      resizeMode: "contain",
+    },
+  });
+
+  return <Image style={styles.logo} source={getTeamLogoFromId()} />;
 }
-
-const styles = StyleSheet.create({
-  logo: {
-    minHeight: 35,
-    minWidth: 35,
-    maxHeight: 45,
-    maxWidth: 45,
-    margin: 10,
-    resizeMode: "contain",
-  },
-});
 
 export default Logo;

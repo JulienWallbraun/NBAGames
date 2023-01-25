@@ -1,39 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
   Text,
 } from "react-native";
 import Logo from "./Logo";
-import { Colors } from "./Colors";
+import { useTheme } from "@react-navigation/native";
 
-class TeamStatsHeader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: true,
-    };
-  }
+function TeamStatsHeader(props) {
+  const [show, setShow] = useState(true);
 
-  render() {
+  const { colors } = useTheme();
+
+  const styles = StyleSheet.create({
+    teamStatsHeader: { 
+      flexDirection: "row", 
+      backgroundColor: colors.backgroundColorSecondary,
+    },
+    teamStatsText: {
+      textAlignVertical: "center",
+      color: colors.fontColorPrimary,
+    },
+  });
+
     return (
       <View
       style={styles.teamStatsHeader}
-      onPress={() => this.setState({ show: !this.state.show })}
+      onPress={() => setShow(!show)}
     >
-      <Logo teamId={this.props.game} />
-      <Text style={{ textAlignVertical: "center" }}>
-        {this.props.gameFullName}
+      <Logo teamId={props.teamId} />
+      <Text style={styles.teamStatsText}>
+        {props.teamFullName}
       </Text>
     </View>
     );
-  }
+  
 }
-
-const styles = StyleSheet.create({
-  teamStatsHeader: { 
-    flexDirection: "row", 
-    backgroundColor: Colors.backgroundColorSecondary},
-});
 
 export default TeamStatsHeader;

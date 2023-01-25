@@ -1,183 +1,202 @@
 import React from "react";
 import { StyleSheet, View, Text } from "react-native";
-import { SmallFlatListSeparator } from "./FlatListSeparators";
+import { FlatListSeparatorSmall } from "./FlatListSeparatorSmall";
 import i18n from "i18n-js";
+import { useTheme } from "@react-navigation/native";
 
-class GamesStats extends React.Component {
-  _isHomeTeamBestFgPct() {
+function GamesStats(props) {
+  const isHomeTeamBestFgPct = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.fg_pct > this.props.visitorTeamStats.fg_pct
+      props.gameFinal &&
+      props.homeTeamStats.fg_pct > props.visitorTeamStats.fg_pct
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestFgPct() {
+  const isVisitorTeamBestFgPct = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.fg_pct < this.props.visitorTeamStats.fg_pct
+      props.gameFinal &&
+      props.homeTeamStats.fg_pct < props.visitorTeamStats.fg_pct
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestFg3Pct() {
+  const isHomeTeamBestFg3Pct = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.fg3_pct > this.props.visitorTeamStats.fg3_pct
+      props.gameFinal &&
+      props.homeTeamStats.fg3_pct > props.visitorTeamStats.fg3_pct
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestFg3Pct() {
+  const isVisitorTeamBestFg3Pct = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.fg3_pct < this.props.visitorTeamStats.fg3_pct
+      props.gameFinal &&
+      props.homeTeamStats.fg3_pct < props.visitorTeamStats.fg3_pct
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestFtPct() {
+  const isHomeTeamBestFtPct = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.ft_pct > this.props.visitorTeamStats.ft_pct
+      props.gameFinal &&
+      props.homeTeamStats.ft_pct > props.visitorTeamStats.ft_pct
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestFtPct() {
+  const isVisitorTeamBestFtPct = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.ft_pct < this.props.visitorTeamStats.ft_pct
+      props.gameFinal &&
+      props.homeTeamStats.ft_pct < props.visitorTeamStats.ft_pct
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestReb() {
+  const isHomeTeamBestReb = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.reb > this.props.visitorTeamStats.reb
+      props.gameFinal &&
+      props.homeTeamStats.reb > props.visitorTeamStats.reb
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestReb() {
+  const isVisitorTeamBestReb = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.reb < this.props.visitorTeamStats.reb
+      props.gameFinal &&
+      props.homeTeamStats.reb < props.visitorTeamStats.reb
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestAst() {
+  const isHomeTeamBestAst = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.ast > this.props.visitorTeamStats.ast
+      props.gameFinal &&
+      props.homeTeamStats.ast > props.visitorTeamStats.ast
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestAst() {
+  const isVisitorTeamBestAst = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.ast < this.props.visitorTeamStats.ast
+      props.gameFinal &&
+      props.homeTeamStats.ast < props.visitorTeamStats.ast
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestPf() {
+  const isHomeTeamBestPf = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.pf < this.props.visitorTeamStats.pf
+      props.gameFinal &&
+      props.homeTeamStats.pf < props.visitorTeamStats.pf
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestPf() {
+  const isVisitorTeamBestPf = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.pf > this.props.visitorTeamStats.pf
+      props.gameFinal &&
+      props.homeTeamStats.pf > props.visitorTeamStats.pf
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestStl() {
+  const isHomeTeamBestStl = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.stl > this.props.visitorTeamStats.stl
+      props.gameFinal &&
+      props.homeTeamStats.stl > props.visitorTeamStats.stl
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestStl() {
+  const isVisitorTeamBestStl = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.stl < this.props.visitorTeamStats.stl
+      props.gameFinal &&
+      props.homeTeamStats.stl < props.visitorTeamStats.stl
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestTurnover() {
+  const isHomeTeamBestTurnover = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.turnover < this.props.visitorTeamStats.turnover
+      props.gameFinal &&
+      props.homeTeamStats.turnover < props.visitorTeamStats.turnover
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestTurnover() {
+  const isVisitorTeamBestTurnover = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.turnover > this.props.visitorTeamStats.turnover
+      props.gameFinal &&
+      props.homeTeamStats.turnover > props.visitorTeamStats.turnover
         ? true
         : false;
     return result;
   }
 
-  _isHomeTeamBestBlk() {
+  const isHomeTeamBestBlk = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.blk > this.props.visitorTeamStats.blk
+      props.gameFinal &&
+      props.homeTeamStats.blk > props.visitorTeamStats.blk
         ? true
         : false;
     return result;
   }
 
-  _isVisitorTeamBestBlk() {
+  const isVisitorTeamBestBlk = () => {
     let result =
-      this.props.gameFinal &&
-      this.props.homeTeamStats.blk < this.props.visitorTeamStats.blk
+      props.gameFinal &&
+      props.homeTeamStats.blk < props.visitorTeamStats.blk
         ? true
         : false;
     return result;
   }
 
-  render() {
+  const { colors } = useTheme();
+
+  const styles = StyleSheet.create({
+    rowGameGlobalStat:{
+      flexDirection: "row",
+      flex: 1
+    },
+    teamGlobalStat: {
+      flex: 5,
+      textAlign: "center",
+      textAlignVertical: "center",
+      margin: 5,
+      color: colors.fontColorPrimary,
+    },
+    bestTeam: {
+      fontWeight: "bold",
+    },
+  });
+
     return (
       <View>
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestFgPct() && styles.bestTeam,
+              isHomeTeamBestFgPct() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.fgm}/{this.props.homeTeamStats.fga} (
-            {Math.round(this.props.homeTeamStats.fg_pct * 100)}%)
+            {props.homeTeamStats.fgm}/{props.homeTeamStats.fga} (
+            {Math.round(props.homeTeamStats.fg_pct * 100)}%)
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("shotsAndPercentageTitle")}
@@ -185,23 +204,23 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestFgPct() && styles.bestTeam,
+              isVisitorTeamBestFgPct() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.fgm}/{this.props.visitorTeamStats.fga}{" "}
-            ({Math.round(this.props.visitorTeamStats.fg_pct * 100)}%)
+            {props.visitorTeamStats.fgm}/{props.visitorTeamStats.fga}{" "}
+            ({Math.round(props.visitorTeamStats.fg_pct * 100)}%)
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestFg3Pct() && styles.bestTeam,
+              isHomeTeamBestFg3Pct() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.fg3m}/{this.props.homeTeamStats.fg3a} (
-            {Math.round(this.props.homeTeamStats.fg3_pct * 100)}%)
+            {props.homeTeamStats.fg3m}/{props.homeTeamStats.fg3a} (
+            {Math.round(props.homeTeamStats.fg3_pct * 100)}%)
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("threesShotsAndPercentageTitle")}
@@ -209,24 +228,24 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestFg3Pct() && styles.bestTeam,
+              isVisitorTeamBestFg3Pct() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.fg3m}/
-            {this.props.visitorTeamStats.fg3a} (
-            {Math.round(this.props.visitorTeamStats.fg3_pct * 100)}%)
+            {props.visitorTeamStats.fg3m}/
+            {props.visitorTeamStats.fg3a} (
+            {Math.round(props.visitorTeamStats.fg3_pct * 100)}%)
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestFtPct() && styles.bestTeam,
+              isHomeTeamBestFtPct() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.ftm}/{this.props.homeTeamStats.fta} (
-            {Math.round(this.props.homeTeamStats.ft_pct * 100)}%)
+            {props.homeTeamStats.ftm}/{props.homeTeamStats.fta} (
+            {Math.round(props.homeTeamStats.ft_pct * 100)}%)
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("freeThrowsAndPercentageTitle")}
@@ -234,23 +253,23 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestFtPct() && styles.bestTeam,
+              isVisitorTeamBestFtPct() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.ftm}/{this.props.visitorTeamStats.fta}{" "}
-            ({Math.round(this.props.visitorTeamStats.ft_pct * 100)}%)
+            {props.visitorTeamStats.ftm}/{props.visitorTeamStats.fta}{" "}
+            ({Math.round(props.visitorTeamStats.ft_pct * 100)}%)
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestReb() && styles.bestTeam,
+              isHomeTeamBestReb() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.reb} ({this.props.homeTeamStats.oreb}/
-            {this.props.homeTeamStats.dreb})
+            {props.homeTeamStats.reb} ({props.homeTeamStats.oreb}/
+            {props.homeTeamStats.dreb})
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("reboundsOffensiveAndDefensiveTitle")}
@@ -258,23 +277,23 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestReb() && styles.bestTeam,
+              isVisitorTeamBestReb() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.reb} (
-            {this.props.visitorTeamStats.oreb}/
-            {this.props.visitorTeamStats.dreb})
+            {props.visitorTeamStats.reb} (
+            {props.visitorTeamStats.oreb}/
+            {props.visitorTeamStats.dreb})
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestAst() && styles.bestTeam,
+              isHomeTeamBestAst() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.ast}
+            {props.homeTeamStats.ast}
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("assistsTitle")}
@@ -282,21 +301,21 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestAst() && styles.bestTeam,
+              isVisitorTeamBestAst() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.ast}
+            {props.visitorTeamStats.ast}
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestStl() && styles.bestTeam,
+              isHomeTeamBestStl() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.stl}
+            {props.homeTeamStats.stl}
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("stealsTitle")}
@@ -304,21 +323,21 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestStl() && styles.bestTeam,
+              isVisitorTeamBestStl() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.stl}
+            {props.visitorTeamStats.stl}
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestBlk() && styles.bestTeam,
+              isHomeTeamBestBlk() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.blk}
+            {props.homeTeamStats.blk}
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("blocksTitle")}
@@ -326,21 +345,21 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestBlk() && styles.bestTeam,
+              isVisitorTeamBestBlk() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.blk}
+            {props.visitorTeamStats.blk}
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestTurnover() && styles.bestTeam,
+              isHomeTeamBestTurnover() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.turnover}
+            {props.homeTeamStats.turnover}
           </Text>
           <Text style={styles.teamGlobalStat}>
             {i18n.t("turnoversTitle")}
@@ -348,50 +367,35 @@ class GamesStats extends React.Component {
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestTurnover() && styles.bestTeam,
+              isVisitorTeamBestTurnover() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.turnover}
+            {props.visitorTeamStats.turnover}
           </Text>
         </View>
-        {SmallFlatListSeparator()}
+        {FlatListSeparatorSmall()}
         <View style={styles.rowGameGlobalStat}>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isHomeTeamBestPf() && styles.bestTeam,
+              isHomeTeamBestPf() && styles.bestTeam,
             ]}
           >
-            {this.props.homeTeamStats.pf}
+            {props.homeTeamStats.pf}
           </Text>
           <Text style={styles.teamGlobalStat}>{i18n.t("foulsTitle")}</Text>
           <Text
             style={[
               styles.teamGlobalStat,
-              this._isVisitorTeamBestPf() && styles.bestTeam,
+              isVisitorTeamBestPf() && styles.bestTeam,
             ]}
           >
-            {this.props.visitorTeamStats.pf}
+            {props.visitorTeamStats.pf}
           </Text>
         </View>
       </View>
     );
-  }
+  
 }
-const styles = StyleSheet.create({
-  rowGameGlobalStat:{
-    flexDirection: "row",
-    flex: 1
-  },
-  teamGlobalStat: {
-    flex: 5,
-    textAlign: "center",
-    textAlignVertical: "center",
-    margin: 5,
-  },
-  bestTeam: {
-    fontWeight: "bold",
-  },
-});
 
 export default GamesStats;

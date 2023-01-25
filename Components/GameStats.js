@@ -1,16 +1,11 @@
 import React from "react";
-import {
-  View,
-  ScrollView,
-  Button,
-  TouchableOpacity,
-} from "react-native";
+import { View, ScrollView, Button, TouchableOpacity } from "react-native";
 import { getPlayersStatsByGame } from "../API/FreeNBAAPI";
 import TeamGlobalStats from "./TeamGlobalStats";
 import TeamPlayersStats from "./TeamPlayersStats";
 import MockResponseGetPlayersStatsOnSpecificGame from "../API/mockResponseGetPlayersStatsOnSpecificGame.json";
 import Moment from "moment";
-import { LargeFlatListSeparator } from "./FlatListSeparators";
+import { FlatListSeparatorLarge } from "./FlatListSeparatorLarge";
 import i18n from "i18n-js";
 import Game from "./Game";
 import TeamStatsHeader from "./TeamStatsHeader";
@@ -32,7 +27,7 @@ class GamesStats extends React.Component {
   _loadGameStats() {
     getPlayersStatsByGame(this.props.route.params.gameId).then((response) => {
       let playersStatsSplittedPerTeam = this._getPlayersStatsSplittedPerTeam(
-        response.data
+        response
       );
       //get global stats per team
       let homeTeamStats = this._getGlobalStats(
@@ -74,7 +69,8 @@ class GamesStats extends React.Component {
         if (
           element.min &&
           element.min.toString() != "" &&
-          element.min.toString() != "0:00"
+          element.min.toString() != "0:00" &&
+          element.min.toString() != "00"
         ) {
           //specific case if player min is round to 60 seconds ex : "34:60" then round to the next minute "35:00"
           if (element.min.toString().indexOf(":60") != -1) {
@@ -174,7 +170,7 @@ class GamesStats extends React.Component {
             />
           )
         }
-        <ScrollView stickyHeaderIndices={[0, 3, 6]}>
+        <ScrollView stickyHeaderIndices={[0, 2, 4]}>
           <TouchableOpacity
             onPress={() =>
               this.setState({
@@ -188,13 +184,13 @@ class GamesStats extends React.Component {
             {this.state.showTeamsGlobalStats && (
               <TeamGlobalStats
                 style={{ flex: 1 }}
-                gameFinal={this.props.route.params.game.status=="Final"}
+                gameFinal={this.props.route.params.game.status == "Final"}
                 homeTeamStats={this.state.homeTeamStats}
                 visitorTeamStats={this.state.visitorTeamStats}
               />
             )}
           </>
-          {LargeFlatListSeparator()}
+          {FlatListSeparatorLarge}
           <TouchableOpacity
             onPress={() =>
               this.setState({
@@ -203,19 +199,33 @@ class GamesStats extends React.Component {
             }
           >
             <TeamStatsHeader
-              game={this.props.route.params.gameHomeTeamId}
-              gameFullName={this.props.route.params.gameHomeTeamFullName}
+              teamId={this.props.route.params.gameHomeTeamId}
+              teamFullName={this.props.route.params.gameHomeTeamFullName}
             />
+
+            
           </TouchableOpacity>
-          <>
+          
             {this.state.showHomeTeamPlayersStats && (
+              <>
               <TeamPlayersStats
                 playersStats={this.state.playersStats.home}
                 teamStats={this.state.homeTeamStats}
               />
+              <Button
+              title={i18n.t("teamGamesListTitle")}
+              onPress={() =>
+                this.props.navigation.push("TeamGamesList", {
+                  teamId: this.props.route.params.gameHomeTeamId,
+                  season: this.props.route.params.gameSeasonId,                  
+                  teamFullName : this.props.route.params.gameHomeTeamFullName,
+                })
+              }
+            />
+            </>
             )}
-          </>
-          {LargeFlatListSeparator()}
+          
+          {FlatListSeparatorLarge}
           <TouchableOpacity
             onPress={() =>
               this.setState({
@@ -225,18 +235,32 @@ class GamesStats extends React.Component {
             }
           >
             <TeamStatsHeader
-              game={this.props.route.params.gameVisitorTeamId}
-              gameFullName={this.props.route.params.gameVisitorTeamFullName}
+              teamId={this.props.route.params.gameVisitorTeamId}
+              teamFullName={this.props.route.params.gameVisitorTeamFullName}
             />
+
+            
           </TouchableOpacity>
-          <>
+          
             {this.state.showVisitorTeamPlayersStats && (
+              <>
               <TeamPlayersStats
                 playersStats={this.state.playersStats.visitor}
                 teamStats={this.state.visitorTeamStats}
               />
+              <Button
+              title={i18n.t("teamGamesListTitle")}
+              onPress={() =>
+                this.props.navigation.push("TeamGamesList", {
+                  teamId: this.props.route.params.gameVisitorTeamId,
+                  teamFullName : this.props.route.params.gameVisitorTeamFullName,
+                  season: this.props.route.params.gameSeasonId,
+                })
+              }
+            />
+            </>
             )}
-          </>
+          
         </ScrollView>
       </View>
     );

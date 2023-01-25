@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -15,43 +15,35 @@ import MockResponseGetGamesOnSpecificDate from "../API/mockResponseGetGamesOnSpe
 import NoGamesImage from "../assets/NoGames.png";
 import Moment from "moment";
 import "moment/min/locales.min";
-import { LargeFlatListSeparator } from "./FlatListSeparators";
+import { FlatListSeparatorLarge } from "./FlatListSeparatorLarge";
 import i18n from "i18n-js";
-import { Colors } from "./Colors";
+import { useTheme } from "@react-navigation/native";
 
-class GamesList extends React.Component {
-  constructor(props) {
-    super(props);
-    this._date = new Date();
-    this.state = {
-      games: [],
-      //to display or not the date picker
-      show: false,
-    };
-    this._loadGames();
-  }
+function GamesList({ navigation }) {
+  const [date, setDate] = useState(new Date());
+  const [games, setGames] = useState([]);
+  //to display or not the date picker
+  const [show, setShow] = useState(false);
 
-  _loadGames() {
+  const loadGames = () => {
     //format date to "2021-12-20" to comply with API date expected format
-    getGamesByDate(Moment(this._date).format("YYYY-MM-DD")).then((response) => {
-      let orderedGames = this._orderGames(response.data);
-      this.setState({ games: orderedGames });
+    getGamesByDate(Moment(date).format("YYYY-MM-DD")).then((response) => {
+      let orderedGames = orderGames(response);
+      setGames(orderedGames);
     });
-  }
+  };
 
-  _loadMockGames() {
-    let orderedGames = this._orderGames(
-      MockResponseGetGamesOnSpecificDate.data
-    );
-    this.setState({ games: orderedGames });
-  }
+  const loadMockGames = () => {
+    let orderedGames = orderGames(MockResponseGetGamesOnSpecificDate.data);
+    setGames(orderedGames);
+  };
 
   /* order games with the following sort :
   - games finalized (same order as given by the API)
   - games in progress (same order as given by the API)
   - games not started (order by starting time, same order as given by the API if several games have the same starting time)
   */
-  _orderGames(games) {
+  const orderGames = (games) => {
     //no need to sort list of games if <= 1
     if (games !== undefined && games.length > 1) {
       let gamesFinalized = [];
@@ -79,41 +71,99 @@ class GamesList extends React.Component {
       games = gamesFinalized.concat(gamesInProgress).concat(gamesNotStarted);
     }
     return games;
-  }
+  };
 
-  _onChangeDatePicker(event, selectedDate) {
+  const onChangeDatePicker = (event, selectedDate) => {
     //change date from picker if not cancel and selected date is different from the current current date used
     if (
       selectedDate !== undefined &&
-      (selectedDate.getDate() != this._date.getDate() ||
-        selectedDate.getMonth() != this._date.getMonth() ||
-        selectedDate.getFullYear() != this._date.getFullYear())
+      (selectedDate.getDate() != date.getDate() ||
+        selectedDate.getMonth() != date.getMonth() ||
+        selectedDate.getFullYear() != date.getFullYear())
     ) {
-      this._date = selectedDate;
-      this._loadGames();
+      date.setTime(selectedDate)
+      loadGames();
     }
-    this.setState({ show: false });
-  }
+    setShow(false);
+  };
 
   //trick to get date with week day, date day, month and year and without hour using Moment, as DateToLocaleString doesn't work well on Android
-  getDate(){
-    let date = Moment(this._date);
-    let llll = date.format( 'LLLL' );
-    let lll = date.format( 'LLL' );
-    let ll = date.format( 'LL' );
-    return llll.replace( lll.replace( ll, '' ), '' );
-  }
+  const getDate = () => {
+    let dateToFormat = Moment(date);
+    let llll = dateToFormat.format("LLLL");
+    let lll = dateToFormat.format("LLL");
+    let ll = dateToFormat.format("LL");
+    return llll.replace(lll.replace(ll, ""), "");
+  };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        {this.state.show && (
+  useEffect(() => {
+    loadGames();
+  }, [] );
+
+  const { colors } = useTheme();
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: "center",
+    },
+    searchContainer: {
+      justifyContent: "center",
+      flexDirection: "row",
+      margin: 4,
+    },
+    button: {
+      justifyContent: "center",
+      backgroundColor: colors.backgroundColorButtonPrimary,
+      margin: 4,
+      paddingHorizontal: 15,
+      paddingVertical : 7,
+      borderRadius: 5,
+    },
+    buttonText: {
+      color: colors.fontColorSecondary,
+    },
+    dateTouchableContainer: {
+      width: 200,
+      backgroundColor: colors.backgroundColorSecondary,
+      justifyContent: "center",
+      alignItems: "center",
+      borderRadius: 5,
+    },
+    dateText: {
+      textAlign: "center",
+      color: colors.fontColorPrimary,
+    },
+    gamesContainer: {
+      flex: 1,
+    },
+    noGames: {
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    noGamesImage: {
+      height: 250,
+      width: 250,
+      resizeMode: "contain",
+      margin: 20,
+    },
+    noGamesText: {
+      fontSize: 25,
+      marginHorizontal: 20,
+      color: colors.fontColorPrimary,
+    },
+  });
+
+  return (
+    <View style={styles.container}>
+      
+        {show && (
           <DateTimePicker
             testID="dateTimePicker"
-            value={this._date}
+            value={date}
             mode="date"
             display="default"
-            onChange={(e, s) => this._onChangeDatePicker(e, s)}
+            onChange={onChangeDatePicker}
           />
         )}
         {
@@ -122,111 +172,76 @@ class GamesList extends React.Component {
             <Button
               title={i18n.t("mockButtonTitle")}
               onPress={() => {
-                this._loadMockGames();
+                loadMockGames();
               }}
             />
           )
         }
         <View style={styles.searchContainer}>
-          <Button
-            color={Colors.backgroundColorButtonPrimary}
-            title={i18n.t("previousDateButtonTitle")}
+        <TouchableOpacity
+            style={styles.button}
             onPress={() => {
-              this._date.setDate(this._date.getDate() - 1);
-              this._loadGames();
+              date.setDate(date.getDate() - 1);
+              loadGames();
             }}
-          />
+          >
+            <Text style={styles.buttonText}>{i18n.t("previousDateButtonTitle")}</Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.dateTouchableContainer}
             onPress={() => {
-              this.setState({ show: true });
+              setShow(true);
             }}
           >
-            <Text style={styles.dateText}>{this.getDate()}</Text>
+            <Text style={styles.dateText}>{getDate()}</Text>
           </TouchableOpacity>
 
-          <Button
-            color={Colors.backgroundColorButtonPrimary}
-            title={i18n.t("nextDateButtonTitle")}
+          <TouchableOpacity
+            style={styles.button}
             onPress={() => {
-              this._date.setDate(this._date.getDate() + 1);
-              this._loadGames();
+              date.setDate(date.getDate() + 1);
+              loadGames();
             }}
-          />
+          >
+            <Text style={styles.buttonText}>{i18n.t("nextDateButtonTitle")}</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.gamesContainer}>
-          {/*Display list of games found for the specified date*/}
-          <FlatList
-            data={this.state.games}
-            ItemSeparatorComponent={LargeFlatListSeparator}
-            keyExtractor={(value) => value.id.toString()}
-            renderItem={(value) => (
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.navigation.navigate("GameStats", {
-                    game: value.item,
-                    gameId: value.item.id,
-                    gameHomeTeamId: value.item.home_team.id,
-                    gameVisitorTeamId: value.item.visitor_team.id,
-                    gameHomeTeamFullName: value.item.home_team.full_name,
-                    gameVisitorTeamFullName: value.item.visitor_team.full_name,
-                  })
-                }
-              >
-                <Game game={value.item}/>
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={
-              //Display image and text to indicate no games were found for the specified date
-              <View style={styles.noGames}>
-                <Image style={styles.noGamesImage} source={NoGamesImage} />
-                <Text style={styles.noGamesText}>{i18n.t("noGamesInfo")}</Text>
-              </View>
-            }
-          />
-        </View>
-      </View>
-    );
-  }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-  },
-  searchContainer: {
-    justifyContent: "center",
-    flexDirection: "row",
-    margin: 4,
-  },
-  dateTouchableContainer: {
-    width: 200,
-    backgroundColor: Colors.backgroundColorSecondary,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dateText: {
-    textAlign: "center",
-  },
-  gamesContainer: {
-    flex: 1,
-  },
-  noGames: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  noGamesImage: {
-    height: 250,
-    width: 250,
-    resizeMode: "contain",
-    margin: 20,
-  },
-  noGamesText: {
-    fontSize: 25,
-    marginHorizontal: 20,
-  },
-});
+      <View style={styles.gamesContainer}>
+        {/*Display list of games found for the specified date*/}
+        <FlatList
+          data={games}
+          ItemSeparatorComponent={FlatListSeparatorLarge}
+          keyExtractor={(value) => value.id.toString()}
+          renderItem={(value) => (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.push("GameStats", {
+                  game: value.item,
+                  gameId: value.item.id,
+                  gameSeasonId: value.item.season,
+                  gameHomeTeamId: value.item.home_team.id,
+                  gameVisitorTeamId: value.item.visitor_team.id,
+                  gameHomeTeamFullName: value.item.home_team.full_name,
+                  gameVisitorTeamFullName: value.item.visitor_team.full_name,
+                })
+              }
+            >
+              <Game game={value.item} />
+            </TouchableOpacity>
+          )}
+          ListEmptyComponent={
+            //Display image and text to indicate no games were found for the specified date
+            <View style={styles.noGames}>
+              <Image style={styles.noGamesImage} source={NoGamesImage} />
+              <Text style={styles.noGamesText}>{i18n.t("noGamesInfo")}</Text>
+            </View>
+          }
+        />
+      </View>
+    </View>
+  );
+}
 
 export default GamesList;
