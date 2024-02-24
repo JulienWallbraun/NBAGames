@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import { getTeamGamesBySeason } from "../API/FreeNBAAPI";
 import MockResponseGetTeamGamesListOnSpecificSeason from "../API/mockResponseGetTeamGamesListOnSpecificSeason.json";
@@ -21,53 +22,12 @@ import TeamGame from "./TeamGame";
 MOCK_API_RESPONSE = false;
 
 function TeamGamesList(props) {
-  const date = new Date();
-
-  const [games, setGames] = useState([]);
-
-  const loadGames = () => {
-    //format date to "2021-12-20" to comply with API date expected format
-    getTeamGamesBySeason(props.route.params.teamId, props.route.params.season).then((response) => {
-      let orderedGames = orderGames(response);
-      setGames(orderedGames);
-    });
-  }
-
-  const loadMockGames = () => {
-    let orderedGames = orderGames(
-      MockResponseGetTeamGamesListOnSpecificSeason.data
-    );
-    setGames(orderedGames);
-  }
-
-  /* order games with the following sort :
-  - games finalized (same order as given by the API)
-  - games in progress (same order as given by the API)
-  - games not started (order by starting time, same order as given by the API if several games have the same starting time)
-  */
-  const orderGames = (games) => {
-    //no need to sort list of games if <= 1
-    if (games !== undefined && games.length > 1) {
-        games.sort(
-          (a, b) => Moment(a.date, "YYYY-MM-DD") - Moment(b.date, "YYYY-MM-DD")
-        );
-      }
-    return games;
-  }
-
-  useEffect(() => {
-    loadGames();
-  }, [] );
+  const games = props.games;
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: "center",
-    },
-    searchContainer: {
-      justifyContent: "center",
-      flexDirection: "row",
-      margin: 4,
     },
     dateTouchableContainer: {
       width: 200,
@@ -93,29 +53,14 @@ function TeamGamesList(props) {
     noGamesText: {
       fontSize: 25,
       marginHorizontal: 20,
+      color: "#FF0000",
     },
   });
   
 
     return (
-      <View style={styles.container}>
-        {
-          /*trick to load mock response on press*/
-          MOCK_API_RESPONSE && (
-            <Button
-              title={i18n.t("mockButtonTitle")}
-              onPress={() => {
-                loadMockGames();
-              }}
-            />
-          )
-        }
-        <View style={styles.gamesContainer}>
-        <TeamStatsHeader
-              teamId={props.route.params.teamId}
-              teamFullName={props.route.params.teamFullName}
-            />
-          {/*Display list of games found for the specified date*/}
+      
+        <View>
           <FlatList
             data={games}
             ItemSeparatorComponent={FlatListSeparatorLarge}
@@ -134,7 +79,7 @@ function TeamGamesList(props) {
                   })
                 }
               >
-                <TeamGame game={value.item} teamId={props.route.params.teamId}/>
+                <TeamGame game={value.item} teamId={props.teamId}/>
               </TouchableOpacity>
             )}
             ListEmptyComponent={
@@ -145,8 +90,8 @@ function TeamGamesList(props) {
               </View>
             }
           />
-        </View>
-      </View>
+          </View>
+       
     );
   
 }

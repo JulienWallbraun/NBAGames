@@ -8,7 +8,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GamesList from "./GamesList";
 import GameStats from "./GameStats";
-import TeamGamesList from "./TeamGamesList";
+import TeamSeaonGames from "./TeamSeasonGames";
 import i18n from "i18n-js";
 
 const Stack = createNativeStackNavigator();
@@ -87,9 +87,9 @@ export default function Navigation() {
           component={GameStats}
         />
         <Stack.Screen
-          name="TeamGamesList"
-          options={{ title: i18n.t("teamGamesListTitle") }}
-          component={TeamGamesList}
+          name="TeamSeasonGames"
+          options={{ title: i18n.t("teamSeasonGamesTitle") }}
+          component={TeamSeaonGames}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -213,9 +213,9 @@ class GamesStats extends React.Component {
                 teamStats={this.state.homeTeamStats}
               />
               <Button
-              title={i18n.t("teamGamesListTitle")}
+              title={i18n.t("teamSeasonGamesTitle")}
               onPress={() =>
-                this.props.navigation.push("TeamGamesList", {
+                this.props.navigation.push("TeamSeasonGames", {
                   teamId: this.props.route.params.gameHomeTeamId,
                   season: this.props.route.params.gameSeasonId,                  
                   teamFullName : this.props.route.params.gameHomeTeamFullName,
@@ -249,9 +249,9 @@ class GamesStats extends React.Component {
                 teamStats={this.state.visitorTeamStats}
               />
               <Button
-              title={i18n.t("teamGamesListTitle")}
+              title={i18n.t("teamSeasonGamesTitle")}
               onPress={() =>
-                this.props.navigation.push("TeamGamesList", {
+                this.props.navigation.push("TeamSeasonGames", {
                   teamId: this.props.route.params.gameVisitorTeamId,
                   teamFullName : this.props.route.params.gameVisitorTeamFullName,
                   season: this.props.route.params.gameSeasonId,
